@@ -1,0 +1,148 @@
+@CHARSET "UTF-8";
+h1{
+	position: relative;
+}
+.record{
+	display:inline-block;
+	position: absolute;
+	right: 5px;
+	top: 0px;
+	color: black;
+}
+.bgimg{
+	display:inline-block;
+	width:67px;
+	height:60px;
+	background:url(../img/img_wdye.png) no-repeat;
+	background-size:cover;
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+.head-btn{
+	display: block;
+	width: auto;
+	height:40px;
+	line-height: 40px;
+	font-size: 0.25rem;
+	color:#fff;
+	background: url(../img/icon_tixian.png) no-repeat;
+	background-position: 40% 49%;
+    background-size: 8%;
+    padding-left: 15px;
+    background-color: #ff4e4e;
+}
+.head-btn-box{
+	margin-top:77px;
+}
+
+body{
+	font-size: 0.15rem;
+}
+.wst-header h1{
+	z-index:-1;
+}
+.head{
+	min-height:160px;
+	color:#fff;
+	background: #E60B49;
+	text-align: center;
+	padding:0px;
+}
+.title{
+	height:50%;
+	font-size: 0.25rem;
+	vertical-align:bottom;
+}
+.money-detail{
+	padding: 5px;
+	background-color: #ffffff;
+	border-bottom: 1px solid #edebeb;
+}
+.money-detail-title{
+	padding: 5px;
+	padding-left:0px;
+	font-size: 0.18rem;
+}
+.m-tr{
+	text-align: right;
+	color:#abaaaa;
+}
+.first-time{
+	font-size: 0.18rem;
+	color:#abaaaa;
+	padding-left:5px;
+	margin-top: 10px;
+}
+.ft-title{
+	background: url(../img/icon_tishi.png) no-repeat;
+	padding-left: 25px;
+    background-size: 6%;
+    background-position: 3px 2px;
+}
+.ft-item{
+	padding-left:25px;
+}
+/*提现*/
+.wst-lo-choice{
+	width: 100%;
+	padding: 2px 2px 2px 5px;
+    height: 36px;
+    border-radius: 2px;
+    border: 1px solid #a0a0a0;
+}
+#content{
+	padding:10px;
+	margin-top:10px;
+	background: #fff;
+	font-size: 0.16rem;
+}
+#content li{
+	margin:5px auto;
+	line-height: 36px;
+}
+/*遮盖层*/
+.wst-cover{
+	position:fixed;
+  	left:0px;top:0px;
+ 	background-color:#000;
+  	width:100%;
+  	height:100%;
+  	filter:alpha(opacity=60);  /*设置透明度为60%*/
+  	opacity:0.6;  /*非IE浏览器下设置透明度为60%*/
+  	z-Index:9999;
+  	display:none;
+}
+/*积分明细弹框*/
+.wst-fr-box{
+    position: fixed;
+	z-index: 9999;
+    right:-999px;
+	bottom: 0px;
+	width:100%;
+	min-height:40%;
+	background:#f2f2f2;
+	font-size: 0.15rem;
+}
+.wst-fr-box .title,.wst-cart-box .title{
+	height: auto;
+	position: relative;
+	padding:6px 0px;
+	border-bottom: 1px solid #f1f1f1;
+}
+.wst-fr-box .title span{
+	float: left;
+	width: 100%;
+	height: 26px;
+	line-height: 26px;
+	text-align: center;
+	font-size: 0.185rem;
+}
+.wst-fr-box .title i,.wst-cart-box .title i{
+	position: absolute;
+	right:5px;
+	top:-2px;
+	font-size: 27px;
+}
+.wst-fr-box .content{
+	background:#f2f2f2;
+}

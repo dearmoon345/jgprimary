@@ -1,0 +1,283 @@
+@CHARSET "UTF-8";
+body{
+	font-size: 0.14rem;
+}
+.order-tab{
+	height:30px;
+	line-height: 30px;
+	padding: 0px;
+	background: #fff;
+}
+.item-head{
+	padding:5px;
+}
+.tab-item{
+	text-align: center;
+}
+.tab-curr{
+	border-bottom:2px solid red;
+}
+.order-item{
+	background: #fff;
+	margin:10px auto;
+}
+.order-tr{
+	text-align: right;
+}
+.o-status{
+	color:red;
+}
+.o-Img{
+	max-width: 60px;
+	max-height: 60px;
+	padding-top: 5px;
+}
+.o-gInfo{
+	padding:5px;
+}
+.o-gName{
+	/*max-height: 40px;*/
+}
+.o-gSpec{
+	color:#ccc;
+}
+.border-b{
+	padding-bottom:5px;
+	border-bottom: 1px solid #ccc;
+}
+.o-btn-box{
+	padding-right: 0px;
+}
+.o-btn{
+	float:right;
+	margin-bottom: 5px;
+	margin-right: 5px;
+	font-size: 0.15rem;
+	color:red;
+	border:1px solid red;
+	padding:0 9px;
+}
+.o-cancel-btn{
+	color:inherit;
+	border: 1px solid #000;
+}
+
+
+
+
+/** 订单详情页 **/
+
+.detail-head{
+	border-bottom: 1px solid #eaeaea;
+	padding:5px 10px;
+	background: #fff;
+	margin-top: 5px;
+}
+.d-uInfo{
+	background: #fff;
+	height:30px;
+	line-height: 30px;
+	margin-bottom: 5px;
+}
+.d-uname{
+	padding:3px 0;
+	margin-left:-4px;
+}
+.d-utel{
+	padding-left:15px;
+}
+.d-shopName{
+	margin-left:-4px;
+	padding-bottom: 5px;
+}
+.d-goodsitme{
+	background: #fff;
+	border-bottom: none;
+	margin-bottom:5px;
+	font-size: 0.14rem;
+}
+.d-item{
+	background: #fff;
+	border-bottom: 1px solid #eaeaea;
+	padding:5px 10px;
+}
+.d-item-right{
+	color:#b5b5b5;
+}
+.d-gSpec{
+	padding-left:10px;
+}
+.price{
+	color:#E60B49;
+}
+.title{
+	font-size: 0.15rem;
+	color:#59595c;
+}
+#detailBox{
+    font-size: 0.17rem;
+}
+#boxTitle{
+	background: #fff;
+}
+.c-item{
+	margin-top:5px;
+	font-size: 0.17rem;
+}
+.c-box{
+	margin:0px;
+	padding:0px;
+	font-size: 0.17rem;
+}
+.c-title{
+	padding-left:5px;
+	background: #fff;
+	height:30px !important;
+	line-height:30px;
+	border-bottom:1px solid #eaeaea;
+}
+.c-content{
+	background: #fff;
+	height:125px!important;
+}
+#complain{
+	width: 100%;
+	height:120px;
+	resize:none;
+}
+.complainFileBox{
+	min-height:65px;
+}
+.complainFileBox li{
+	float:left;
+	/*margin-right:5px;*/
+	/*max-height:60px*/
+	margin-left: 5px;
+	min-height: 60px;
+}
+.complainFileBox img{
+	max-width: 50px;
+	/*max-height: 50px;*/
+	min-height: 60px;
+}
+.edit_charts{
+	position: relative;
+}
+.del-btn{
+	position:relative;
+	top:-60px;
+	left:0px;
+}
+.ui-icon, [class^="ui-icon-de"] {
+	font-size: 20px;
+	position: absolute;
+	left: 32px;
+    top: -1px;
+    color: red;
+    line-height: 17px;
+}
+/*上传按钮*/
+.uploadfile-box{
+	background: #fff;
+	height:100px !important; 
+	position: relative;
+}
+.ui-icon-thumb{
+	line-height: 20px;
+}
+.uploadfile-input{
+	width: 12%;
+    height: 25px;
+    position: absolute;
+    left: 0px;
+    top: 73px;
+    z-index: -55;
+    opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/************ 弹出层 ************/
+.wst-cover{
+	position:fixed;
+  	left:0px;top:0px;
+ 	background-color:#000;
+  	width:100%;
+  	height:100%;
+  	filter:alpha(opacity=60);  /*设置透明度为60%*/
+  	opacity:0.6;  /*非IE浏览器下设置透明度为60%*/
+  	z-Index:9999;
+  	display:none;
+}
+/*投诉弹框*/
+.wst-fr-box{
+    position: fixed;
+	z-index: 9999;
+    right:0px;
+	bottom: -300px;
+	width:100%;
+	min-height:40%;
+	background:#f2f2f2;
+	font-size: 0.15rem;
+}
+.wst-fr-box .title,.wst-cart-box .title{
+	position: relative;
+	padding:6px 0px;
+	border-bottom: 1px solid #f1f1f1;
+}
+.wst-fr-box .title span{
+	float: left;
+	width: 100%;
+	height: 26px;
+	line-height: 26px;
+	text-align: center;
+	font-size: 0.185rem;
+}
+.wst-fr-box .title i,.wst-cart-box .title i{
+	position: absolute;
+	right:5px;
+	top:-2px;
+	font-size: 27px;
+}
+.wst-fr-box .content{
+	background:#f2f2f2;
+	overflow: scroll;
+}
+
+.complain-item{
+	background: #fff;
+	border-bottom: 1px solid #eaeaea;
+	padding:10px;
+	font-size: 0.17rem;
+}
+#content{
+	min-height:130px;
+}
+/*checkbox*/
+.ui-checkbox input:before, .ui-checkbox-s input:before{
+	left: 53px;
+    top: -21px;
+    font-size: 26px !important;
+}
+.ui-checkbox input:checked:before, .ui-checkbox-s input:checked:before{
+	color:#e32726 !important;
+}
+.c-btn{
+	background: #E60B49;
+	color:#fff;
+}

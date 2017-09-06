@@ -1,0 +1,43 @@
+{extend name="default/base" /}
+{block name="title"}提现记录 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/cashdraws.css?v={$v}">
+{/block}
+{block name="header"}
+    <header style="background:#ffffff;" class="ui-header ui-header-positive ui-border-b wst-header">
+        <i class="ui-icon-return" onclick="history.back()"></i><h1>提现记录</h1>
+    </header>
+{/block}
+{block name="main"}
+
+<script type="text/html" id="scoreList">
+{{# for(var i=0;i<d.length;i++){ }}
+    <li class="ui-col ui-col-75">
+        {{d[i].accUser}}<br />
+        {{d[i].accTargetName}}{{d[i].accAreaName}}<br />
+        <span class="score-time">{{d[i].createTime}}</span>
+    </li>
+    <li class="ui-col ui-col-25 score-text">
+    {{#if(d[i].cashSatus==1){}}<span style="color:green;">已通过</span>{{#}else{}}待处理{{#}}}
+    <br />
+    - {{d[i].money}}
+    </li>
+    <div class="wst-clear"></div>
+    <div class="score-line"></div>
+{{# } }}
+</script>
+
+<input type="hidden" name="" value="" id="currPage" autocomplete="off">
+<input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+<section class="ui-container">
+    <ul class="ui-row score-detail">
+        <div id="score-list"></div>
+    </ul>
+</section>
+
+
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/users/cashdraws/cashdraws.js?v={$v}'></script>
+{/block}

@@ -1,0 +1,107 @@
+{extend name="default/base" /}
+{block name="title"}购物车 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/carts.css?v={$v}">
+{/block}
+{block name="header"}
+       <header style="background:#ffffff;" class="ui-header ui-header-positive wst-header">
+       	   <i class="ui-icon-return" onclick="history.back()"></i><h1>购物车</h1>
+       	   <span id="edit" class="edit" onclick="javascript:edit(0);">编辑</span><span id="complete" class="edit" onclick="javascript:edit(1);" style="display: none;">完成</span>
+       </header>
+{/block}
+{block name="footer"}
+{if(count($carts['carts'])>0)}
+        <footer class="ui-footer wst-footer-btns" style="height:42px; border-top: 1px solid #e8e8e8;bottom:42px;" id="footer">
+			<div class="wst-ca-se">
+			<div class="wst-ca-layout">
+				<div class="wst-ca-10 totall"><i class="ui-icon-choose ui-icon-unchecked-s" cartId="0" mval="0"></i>&nbsp;</div>
+				<div class="wst-ca-90 totalr">
+					<span>全选</span>
+					<button id="settlement" class="button" type="button" onclick="javascript:toSettlement();">结算</button>
+					<button id="delete" class="button" type="button" onclick="javascript:deletes();" style="display: none;">删除</button>
+					<span id="total" class="total">合计：<span id="totalMoney">¥{php}echo sprintf("%.2f", $carts['goodsTotalMoney']);{/php}</span></span>
+				</div>
+			</div>
+			</div>
+        </footer>
+{/if}
+{include file="default/footer" /}
+{/block}
+{block name="main"}
+     <section class="ui-container">
+     {if(count($carts['carts'])>0)}
+     <input type="hidden" name="" value="0" id="buyNum_0" autocomplete="off">
+     <input type="hidden" name="" value="{php}echo count($carts['carts'])+1;{/php}" id="totalshop" autocomplete="off">
+     {volist name="$carts['carts']" id="ca" key="k"}
+	     <div class="wst-ca-s">
+			<div class="wst-ca-layout shop">
+				<div class="wst-ca-10 shopl">
+					<i class="ui-icon-chooses ui-icon-unchecked-s" childrenId="clist{$k}" cartId="0" mval="0"></i>&nbsp;</div>
+				<div class="wst-ca-90 shopr"><p class="ui-nowrap">{$ca['shopName']}</p></div>
+			</div>
+			{volist name="ca['list']" id="li"}
+			<div class="wst-ca-layout goods{if($li['goodsStock']==0)} nogoods{/if}">
+				<div class="wst-ca-10 goodsl"><i class="ui-icon-chooseg {if($li['isCheck'])}ui-icon-success-block wst-active{else}ui-icon-unchecked-s{/if} clist{$k}" cartId="{$li['cartId']}" mval="{$li['shopPrice']}"></i>&nbsp;</div>
+				<div class="wst-ca-90">
+					<div class="wst-ca-24 goodsr">
+						<div class="img j-imgAdapt">
+							<a href="javascript:void(0);" onclick="javascript:WST.intoGoods({$li['goodsId']});">
+							<img src="__ROOT__/{:WSTImg($li['goodsImg'],3)}" title="{$li['goodsName']}">
+							</a>
+						</div>
+					</div>
+					<div class="wst-ca-76">
+						<div class="info">
+							<p class="name">{$li['goodsName']}</p>
+							{if($li['specNames'])}
+							<p class="spec">规格：
+							{volist name="li['specNames']" id="sp"}
+								{$sp['catName']}:{$sp['itemName']}
+							{/volist}
+							</p>
+							<!-- <p class="price">¥{$li['shopPrice']}</p><!-- 原代码 -->
+							{/if}
+							<p class="price">¥{$li['shopPrice']}</p><!-- 添加代码 -->
+
+							<div class="wst-buy_l">
+								<a class="wst-buy_l3" type="button" value="" onclick='javascript:WST.changeIptNum(1,"#buyNum",{$li["cartId"]},"statCartMoney")'>+</a>
+							 	<input id="buyNum_{$li['cartId']}" class="wst-buy_l2" data-min='1' data-max='{$li["goodsStock"]}' type="number" value="{$li['cartNum']}" autocomplete="off" onkeyup='WST.changeIptNum(0,"#buyNum",{$li["cartId"]},"statCartMoney")'/>
+							 	<a class="wst-buy_l1" type="button" value="" onclick='javascript:WST.changeIptNum(-1,"#buyNum",{$li["cartId"]},"statCartMoney")' style="line-height: 22px;">-</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<span id="noprompt{$li['cartId']}" class="noprompt" style="display: none;"></span>
+			</div>
+			{/volist}
+			<div class="wst-ca-layout bottom">
+				<p class="wst-ca-50">共{php}echo count($ca['list']);{/php}件商品</p><p id="tprice_{$k}" class="wst-ca-50 price">¥{php}echo sprintf("%.2f", $ca['goodsMoney']);{/php}</p>
+			</div>
+		</div>
+		{/volist}
+		{else}
+		
+	  <div class="wst-carttsi"><!--<i class="ui-icon-cart wst-cartts"></i>
+	  	<img src="__MOBILE__/img/img/gouwuche_line.png"/>
+	  </div>
+		<!--<ul class="ui-row-flex wst-flexslps" style="margin-top: 12px;overflow: auto;text-align: center;">
+	       <li class="ui-col ui-flex ui-flex-pack-center" style="overflow: auto;">
+	       	<p class="wst-carttst">购物车空空也！</p>
+	       </li>
+	     
+       </ul>-->
+        	<p class="wst-is-empty"><img src="__MOBILE__/img/gouwuche.jpg"></p>
+        	<!--<div class="wst-is-follow" type="button" onclick='location.href="http://www.jingo.com/mobile/index/index.html"'>跟我走跟我走!</div>-->
+        
+		{/if}
+     </section>
+{/block}
+{block name="include"}
+{include file="default/dialog" /}<!-- 对话框模板 -->
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/carts.js?v={$v}'></script>
+{/block}
+
+
+

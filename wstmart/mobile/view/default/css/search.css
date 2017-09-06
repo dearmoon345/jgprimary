@@ -1,0 +1,60 @@
+.hot-search{height: auto;padding: 0.1rem 0.2rem;font-size: 0.24rem;}
+.hot-search-list{height: auto;padding: 0 0.2rem;}
+.hot-search-list div{font-size: 0.16rem;float: left;text-align: center;border: 1px solid #333;border-radius: 0.06rem;padding: 0 7px;margin-right: 10px;margin-bottom: 10px;}
+.hot-search-list div a{color: #333333;}
+.ui-footer{display: none;}
+
+.wst-in-search .ui-icon-search {
+    position: absolute;
+   
+    right: -5px;
+    font-size: 4.5rem;
+    color: #59595c;
+    top: -8px;}
+#searchRecored{
+	margin-top: 20px;
+	height: 30px;
+	font-weight: bold;
+	padding-left: 10px;
+	line-height: 30px;
+}
+#searchList div{
+	display: inline-block;
+	height: 24px;
+	line-height: 24px;
+	background: #ECECEC;
+	border-radius: 8px;
+	padding: 0 10px;
+	margin: 15px 10px 0px 0px; 
+}
+#clearAll{
+	display: block;
+	float: right;
+	margin-right: 10px;
+	font-weight: normal;
+	
+}
+.norecored{text-align: center;}
+.modal-footer button{width: 40%;background: #E60B49;float: right;margin-right: 5%;color: #fff;}
+.modal-footer button:nth-child(1){background: #fff;float: left;border: 1px solid  #666 ;margin-left: 5%;color: #000;}
+
+/******新增模糊搜索*******/
+#showSearchList{
+	width: 100%;
+	/*height: 200px;*/
+	
+	/*background: pink;*/
+	position: fixed;
+	top: 44px;
+	line-height: 30px;
+	font-size: 14px;
+}
+#showSearchList div{
+	padding: 0px 15px 0px 20px;
+	border-bottom: 1px solid #ccc;
+	background: #fff;
+	display: block;
+	width: 100%;
+	text-decoration: none;
+	color: #333;
+}

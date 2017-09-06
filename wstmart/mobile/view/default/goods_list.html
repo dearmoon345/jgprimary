@@ -1,0 +1,87 @@
+{extend name="default/base" /}
+{block name="title"}商品列表 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/swiper.min.css">
+<link rel="stylesheet"  href="__MOBILE__/css/goods_list.css?v={$v}">
+{/block}
+{block name="header"}
+	<header class="ui-header ui-header-positive wst-in-header">
+	    <i class="ui-icon-return" onclick="history.back()"></i>
+    </header>
+    <div class="wst-in-search search" style="width: 75%;" onclick="location.href='{:url('mobile/search/search')}'">
+    	<!--<span class="seleft"></span>-->
+    	<div id="wst-search" style="padding-left:15px;color: rgb(170,170,170);font-size: 14px;height: 26px;line-height: 26px;">  搜索商品   </div>
+    	<!--<span class="seright"></span><p></p>-->
+    	<span class="ui-icon-search" onclick="javascript:WST.search(0);"></span>
+    </div>
+{/block}
+{block name="main"}
+     <input type="hidden" name="" value="{$keyword}" id="keyword" autocomplete="off">
+     <input type="hidden" name="" value="{$catId}" id="catId" autocomplete="off">
+	 <input type="hidden" name="" value="{$brandId}" id="brandId" autocomplete="off">
+     <input type="hidden" name="" value="" id="condition" autocomplete="off">
+	 <input type="hidden" name="" value="" id="desc" autocomplete="off">
+	 <input type="hidden" name="" value="" id="currPage" autocomplete="off">
+     <input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+     <section class="ui-container">
+        <div class="wst-shl-ads">
+     		<div class="title">热卖推荐</div>
+		   <div class="wst-gol-adsb">
+			<div class="swiper-container">
+	          <div class="swiper-wrapper">
+	          	{wst:goods type='recom' cat='$catId' num='8'}
+	                <div class="swiper-slide" style="width:33.333333%;">
+	                     <div class="wst-gol-img j-imgRec">
+		                     <a href="javascript:void(0);" onclick="javascript:WST.intoGoods({$vo['goodsId']});">
+		                     <img src="__ROOT__/{:WSTImg($vo['goodsImg'],3)}" title="{$vo['goodsName']}">
+		                     </a>
+	                     </div>
+	                     <p>¥{$vo['shopPrice']}</p>
+	                </div>
+	             {/wst:goods}
+	          </div>
+	        </div>
+	        </div>
+     	</div>
+     	<div class="ui-row-flex wst-shl-head">
+		    <div class="ui-col ui-col sorts active" status="down" onclick="javascript:orderCondition(this,0);">
+		   		 <p class="pd0">销量</p><i class="down2"></i>
+		    </div>
+		    <div class="ui-col ui-col sorts" status="down" onclick="javascript:orderCondition(this,1);">
+		   		 <p class="pd0">价格</p><i class="down"></i>
+		    </div>
+		    <div class="ui-col ui-col sorts" status="down" onclick="javascript:orderCondition(this,2);">
+		   		 <p class="pd0">人气</p><i class="down"></i>
+		    </div>
+		    <div class="ui-col ui-col sorts" status="down" onclick="javascript:orderCondition(this,3);">
+		   		 <p>上架时间</p><i class="down"></i>
+		    </div>
+		</div>
+		<ul class="ui-tab-content">
+	        <li id="goods-list"></li>
+	    </ul>
+     </section>
+<script id="list" type="text/html">
+{{# if(d && d.length>0){ }}
+{{# for(var i=0; i<d.length; i++){ }}
+<div class="wst-in-goods" onclick="javascript:WST.intoGoods({{ d[i].goodsId }});">
+<div class="img j-imgAdapt"><a href="javascript:void(0);"><img src="__ROOT__/{{ d[i].goodsImg }}" title="{{ d[i].goodsName }}"/></a></div>
+<div class="name ui-nowrap-multi">{{ d[i].goodsName }}</div>
+<div class="info"><span class="price">经销价：¥{{ d[i].shopPrice }}</span><span class="marketprice">原价:￥{{ d[i].marketPrice }}</span></div>
+</div>
+{{# } }}
+<div class="wst-clear"></div>
+{{# }else{ }}
+	<ul class="ui-row-flex wst-flexslp">
+		<li class="ui-col ui-flex ui-flex-pack-center">
+		<p>对不起，没有相关商品。</p>
+		</li>
+	</ul>
+{{# } }}
+
+</script>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/swiper.jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/js/goods_list.js?v={$v}'></script>
+{/block}

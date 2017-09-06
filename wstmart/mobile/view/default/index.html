@@ -1,0 +1,136 @@
+{extend name="default/base" /}
+{block name="title"}首页 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/swiper.min.css">
+<link rel="stylesheet"  href="__MOBILE__/css/index.css?v={$v}">
+{/block}
+{block name="header"}
+    <header class="ui-header ui-header-positive wst-in-header" id="j-header">
+    </header>
+    <div class="wst-in-icon" id="j-icon">
+    <!--<a href="{:url('mobile/users/index')}"><span class="cats calogos"></span></a>-->
+    <span onclick="location.href='{:url('mobile/messages/index')}'" class="news">{if($news['message']['num']>0)}<i class="wst-in-num">{$news['message']['num']}</i>{/if}</span>
+    </div>
+    <!--<div class="wst-in-search search" id="j-search" onclick="location.href='{:url('mobile/messages/search')}'">-->
+	<div class="wst-in-search search" style="width: 75%;left: 10%;" id="j-search" onclick="location.href='{:url('mobile/search/search')}'">
+    	<!--<span class="seleft"></span>-->
+    	<div id="wst-search" style="padding-left:15px;color: rgb(170,170,170);font-size: 14px;height: 26px;line-height: 26px;">  搜索商品   </div>
+    	<!--<span class="seright"></span><p></p>-->
+    	<span class="ui-icon-search" onclick="javascript:WST.search(0);"></span>
+    </div>
+{/block}
+{block name="main"}
+<input type="hidden" name="" value="-1" id="currPage" autocomplete="off">
+<section class="ui-container">
+        <div class="ui-slider swiper-container" style="padding-top:50%;">
+		    <ul class="ui-slider-content swiper-wrapper" style="width:100%;">
+		    	{wst:ads code="wx-ads-index" cache='86400'}
+		        <li class="advert1 swiper-slide"><span><a href="{$vo.adURL}"><img style="width:100%; height:100%; display:block;" src="__ROOT__/{:WSTImg($vo.adFile,2)}"></a></span></li>
+		        {/wst:ads}
+		    </ul>
+		</div>
+		<div class="ui-row wst-in-choose">
+		    {volist name=':WSTMobileBtns(0)' id='btn'}
+		    <div class="ui-col ui-col-25">
+		    <a href="{:url($btn['btnUrl'])}">	
+		    <p><img  src="__ROOT__/{$btn['btnImg']}" style='margin-top:14px;width: 0.5rem;height: 0.5rem;'/></p>
+		    <span>{$btn['btnName']}</span>
+		    </a></div>
+		    {/volist}
+		</div>
+		<!--<div class="wst-in-news">
+			<span class="new">最新资讯：</span>
+			<marquee scrollamount='3' behavior='right'>{wst:article cat="new" num='6' cache='86400'}<a href="{:url('mobile/news/view',['articleId'=>$vo['articleId']])}">{$vo['articleTitle']}。</a>{/wst:article}</marquee>
+			<span class="more" onclick="location.href='{:url('mobile/news/view')}'">更多</span>
+			<div class="wst-clear"></div>
+		</div>-->
+
+		<!-- 新增 -->
+		<div class="xz-box">
+			<div class="wst-in-hot">
+				<img class="bx-img" src="__MOBILE__/img/xinpinshoufa_png.png" alt="新品首发" />
+			</div>
+			<ul class="sx-img">
+				<li><img src="__MOBILE__/img/paihangbang_png.png" alt="排行榜"></li>
+				<li><img src="__MOBILE__/img/jingmeihaohuo_png.png" alt="精美好货"></li>
+			</ul>
+		</div>
+
+
+
+		
+		<div class="wst-in-adst">
+			{wst:ads code="wx-index-large" cache='86400' num='4'}
+			<a class="advert2" href="{$vo.adURL}"><div class="adst"><img src="__ROOT__/{:WSTImg($vo.adFile,2)}"/></div></a>
+			{/wst:ads}
+			<div class="wst-clear"></div>
+		</div>
+		<div class="wst-in-adsb">
+		<div class="swiper-container">
+          <div class="swiper-wrapper">
+          	{wst:ads code="wx-index-small" cache='86400' num='4'}
+                <div class="swiper-slide" style="width:33.333333%;">
+                  <div class="goodsinfo-container">
+                    <a class="advert3" href="{$vo.adURL}"><img src="__ROOT__/{:WSTImg($vo.adFile,2)}" ></a>
+                  </div>
+                </div>
+            {/wst:ads}
+          </div>
+        </div>
+        </div>
+		<div id="goods-list"></div>
+</section>
+<script id="list" type="text/html">
+<div class="wst-in-title colour{{ d.currPage }}">
+	<div class="left">
+		<p class="line1"></p><span></span><p class="line2"></p><span></span>
+		<p></p><span></span>
+		<p class="line2"></p><span></span><p class="line1"></p></div>
+	<div class="right">
+		<p class="line1"></p><span></span><p class="line2"></p><span></span>
+		<p class="line1"></p><span></span>
+		<p></p><span></span>
+		<p class="line2"></p><span></span><p class="line1"></p></div>{{ d.catName }}
+</div>
+	{{# if(d.ads && d.ads.length>0){ }}
+		<div class="wst-in-adscats"><a href="{{ d.ads[0].adURL }}"><img src="__ROOT__/{{ d.ads[0].adFile }}"/></a></div>
+	{{# } }}
+	
+	<div class="">
+		{{# if(d.goods.length>0){ }}
+			<div class="goods-ul-box">
+			{{# for(var i=0; i<d.goods.length; i++){ }}
+				<div class="wst-in-goods" onclick="javascript:WST.intoGoods({{ d.goods[i].goodsId }});">
+					<div class="img j-imgAdapt"><a href="javascript:void(0);" onclick="javascript:WST.intoGoods({{ d.goods[i].goodsId }});"><img src="__ROOT__/{{ d.goods[i].goodsImg }}" title="{{ d.goods[i].goodsName }}"/></a></div>
+					<div class="name ui-nowrap-multi">{{ d.goods[i].goodsName }}</div>
+					<div class="info"><span class="price">经销价：¥{{ d.goods[i].shopPrice }}</span><span class="marketprice">原价:￥{{ d.goods[i].marketPrice}}</span></div>
+				</div>
+			{{# } }}
+		{{# } }}
+		</div>
+		<div class="wst-clear"></div>
+	</div>
+<div class="wst-clear"></div>
+</script>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/js/swiper.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/js/index.js?v={$v}'></script>
+	<script type="text/javascript">
+		//<!--轮播启动-->
+		var mySwiper = new Swiper('.swiper-container', {
+			direction: 'horizontal',//左右轮播
+//	        direction: 'vertical',//上下轮播
+			// loop: true,
+			// speed: 500,
+			// pagination: '.swiper-pagination',
+			// autoplay: 2000,
+			// autoplayDisableOnInteraction: false
+		});
+
+		/*window.onpopstate= function(){
+				window.close();
+			}*/
+	</script>	
+{/block} 

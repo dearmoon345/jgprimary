@@ -1,0 +1,93 @@
+@CHARSET "UTF-8";
+body{
+	font-size:0.15rem;
+}
+.news-time{
+  margin-top:10px;
+  text-align: center;
+}
+
+.news-content-box{
+  background: #fff;
+}
+.news-content{
+	max-height:100px;
+}
+.news-title{
+	font-weight: bold;
+}
+
+
+
+/*遮盖层*/
+.wst-cover{
+	position:fixed;
+  	left:0px;top:0px;
+ 	background-color:#000;
+  	width:100%;
+  	height:100%;
+  	filter:alpha(opacity=60);  /*设置透明度为60%*/
+  	opacity:0.6;  /*非IE浏览器下设置透明度为60%*/
+  	z-Index:9999;
+  	display:none;
+}
+/*分类弹框*/
+.wst-fr-box{
+    position: fixed;
+	z-index: 9999;
+    right:-999px;
+	bottom: 0px;
+	width:100%;
+	min-height:40%;
+	background:#f6f6f8;
+	font-size: 0.15rem;
+}
+.wst-fr-box .title,.wst-cart-box .title{
+	position: relative;
+	padding:6px 0px;
+	border-bottom: 1px solid #f1f1f1;
+}
+.wst-fr-box .title span{
+	float: left;
+	width: 100%;
+	height: 26px;
+	line-height: 26px;
+	text-align: center;
+	font-size: 0.185rem;
+}
+.wst-fr-box .title i,.wst-cart-box .title i{
+	position: absolute;
+	right:5px;
+	top:-2px;
+	font-size: 27px;
+}
+.wst-fr-box .content{
+	overflow-y: scroll;
+	background:#fff;
+}
+.wst-fr-box .button,.wst-cart-box .button{
+	position: absolute;
+	left:3%;
+	bottom:0px;
+	width: 93%;
+	font-size: 0.185rem;
+    height: 40px;
+    line-height: 40px;
+    color:#ffffff;
+    background:#e00102;
+	border-bottom:1px solid #e00102;
+}
+.wst-fr-box .button:not(.disabled):not(:disabled):active,.wst-cart-box .button:not(.disabled):not(:disabled):active{
+	color:#fff0f0;
+	background:#f52f30;
+	background-clip: padding-box;
+}
+.title{
+	background: #fff;
+}
+.view-content{
+	background: #fff;
+}
+#createTime{
+	background: #f6f6f8;
+}

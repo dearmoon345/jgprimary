@@ -1,0 +1,51 @@
+{extend name="default/base" /}
+{block name="title"}商品分类 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet" href="__MOBILE__/css/goods_category.css?v={$v}">
+{/block}
+{block name="header"}{/block}
+{block name="main"}
+	<section class="ui-container">
+		<div class="ui-scrollerl" id="ui-scrollerl">
+		    <ul>
+		    	{volist name="list" key="k" id="go"}
+		        <li id="goodscate" class="wst-goodscate {if($k==1)}wst-goodscate_selected{/if}" onclick="javascript:showRight(this,{$k-1});">{php}echo str_replace('、', '<br/>', $go['catName']);{/php}</li>
+		        {/volist}
+		    </ul>
+		</div>
+		{volist name="list" key="k" id="go"}
+		<div class="wst-scrollerr goodscate1" {if($k!=1)}style="display:none;"{/if}>
+			<div class="wst-gc-br">
+			{wst:brand cat="$go['catId']" id="bvo" num='16' cache='86400'}
+				<a href="javascript:void(0)" onclick="javascript:getBrandGoodsList({$bvo['brandId']});"><img src="__ROOT__/{:WSTImg($bvo['brandImg'],2)}"></a>
+			{/wst:brand}
+			</div>
+			<div class="wst-clear"></div>
+			{volist name="go['childList']" id="go1"}
+		    <ul>
+		        <div class="wst-gc-ads">
+		     		<a href="javascript:void(0);" onclick="javascript:getGoodsList({$go1['catId']});"><div class="title">{$go1.catName}</div></a>
+		     	</div>
+		        <li>
+			        <div class="wst-goodscat">
+			        	{volist name="go1['childList']" id="go2"}
+			        	<span><a href="javascript:void(0);" onclick="javascript:getGoodsList({$go2['catId']});">{$go2.catName}</a></span>
+			        	{/volist}
+			        </div>
+		        </li>
+		        <div class="wst-clear"></div>
+		    </ul>
+		    {/volist}
+		</div>
+		{/volist}
+		<div class="wst-clear"></div>
+	</section>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/goods_category.js?v={$v}'></script>
+<!--<script type="text/javascript">
+	$("span").on("tap",function(){
+	  $(this).css('background-color','#cccccc');
+	});
+</script>-->
+{/block}

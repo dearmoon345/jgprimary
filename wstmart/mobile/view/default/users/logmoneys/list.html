@@ -1,0 +1,104 @@
+{extend name="default/base" /}
+{block name="title"}我的资金 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/logmoneys.css?v={$v}">
+{/block}
+{block name="header"}
+    <header style="background:#ffffff;" class="ui-header ui-header-positive wst-header">
+        <i class="ui-icon-return" onclick="history.back()"></i><h1>我的资金</h1>
+        <span class="record" onclick="location.href='{:url('mobile/cashdraws/index')}'">记录</span>
+    </header>
+{/block}
+{block name="main"}
+    <input type="hidden" name="" value="{$rs['isSetPayPwd']}" id="isSet" autocomplete="off">
+    <section class="ui-container">
+        <div class="ui-row-flex ui-whitespace ui-row-flex-ver head">
+                <div class="ui-col title">
+                    <span class="bgimg"></span><br />
+                    <span id="userMoney" money="{$rs['userMoney']}">￥{$rs['userMoney']}</span>
+                </div>
+                <div class="ui-col head-btn-box" style="padding: 0px;">
+                    <a href="javascript:void(0)" onclick="getCash()" class="head-btn">提现</a>
+                </div>
+        </div>
+        <ul class="ui-row money-detail" onclick="checkSecret()">
+            <li class="ui-col ui-col-50 money-detail-title">我的提现账户</li>
+            <li class="ui-col ui-col-50 money-detail-title m-tr">{$rs['num']}个 ></li>
+        </ul>
+        <ul class="ui-row money-detail" onclick="javascript:toRecord()">
+            <li class="ui-col ui-col-50 money-detail-title">我的资金流水</li>
+            <li class="ui-col ui-col-50 money-detail-title m-tr">></li>
+        </ul>
+        <ul class="ui-row first-time">
+            <li class="ui-col ui-col-100 ft-title">首次提现步骤：</li>
+            <li class="ui-col ui-col-100 ft-item">1.设置支付密码和绑定手机号码</li>
+            <li class="ui-col ui-col-100 ft-item">2.绑定您的微信钱包或银行卡</li>
+        </ul>
+    </section>
+
+{/block}
+
+
+{block name="include"}
+{include file="default/dialog" /}
+{/* 对话框 prompt */}
+<div class="ui-dialog" id="payPwdBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+            <p id="wst-dialog" class="wst-dialog-t">
+                请输入支付密码：<br />
+                <input type="password" id="payPwd" maxLength="6" class="wst-pay-inp"/>
+            </p>
+            <p class="wst-dialog-l"></p>
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event3" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+        </div>
+    </div>        
+</div>
+
+
+{/* 遮盖层  */}
+<div class="wst-cover" id="cover"></div>
+{/* 分类层  */}
+<div class="wst-fr-box" id="frame">
+    <div class="title"><span>申请提现</span><i class="ui-icon-close-page" onclick="javascript:dataHide();"></i><div class="wst-clear"></div></div>
+    <div class="content" id="content">
+        <ul class="ui-row">
+            <li class="ui-col ui-col-25">提现账号：</li>
+            <li class="ui-col ui-col-75">
+                <select name="accId" id="accId" class="wst-lo-choice">
+                    <option value="">请选择</option>
+                </select>
+            </li>
+            <li class="ui-col ui-col-25">提现金额：</li>
+            <li class="ui-col ui-col-75">
+                <input type="text" name="money" id="money" class="wst-lo-choice" onkeypress='return WST.isNumberKey(event);' onkeyup="javascript:WST.isChinese(this,1)" autocomplete="off" />
+            </li>
+<!--             <li class="ui-col ui-col-25">支付密码：</li>
+            <li class="ui-col ui-col-75">
+                <input type="password"  id="cashPayPwd" class="wst-lo-choice" maxLength="6"  onkeypress='return WST.isNumberKey(event);' onkeyup="javascript:WST.isChinese(this,1)" autocomplete="off" />
+            </li> -->
+			<li class="ui-col wst-red">（至少￥{:WSTConf('CONF.drawCashUserLimit')}可提现）</li>
+            <li class="ui-col ui-col-100">
+                <div class="ui-btn-wrap">
+                    <button class="ui-btn-lg ui-btn-danger" id="submit" onclick="drawMoney()">
+                        确定
+                    </button>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+</div>
+{/block}
+
+
+
+
+
+
+
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/users/logmoneys/logmoneys.js?v={$v}'></script>
+{/block}

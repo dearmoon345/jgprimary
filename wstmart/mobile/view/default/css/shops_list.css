@@ -1,0 +1,155 @@
+@CHARSET "UTF-8";
+/*店铺街*/
+.wst-shl-adsb{
+	padding:10px;
+	height: 110px;
+	background:#ffffff;
+}
+.wst-shl-adsb img{
+	width: 100%;
+	height: 100%;
+	display:block;
+}
+.wst-shl-head{
+	background:#ffffff;
+	font-size:0.16rem;
+	color:#6a6b6d;
+}
+.wst-shl-head .choice{
+	width:65%;
+	height: 16px;
+	margin:0 auto;
+	padding:10px 0px;
+}
+.wst-shl-head .active{
+	color:#de0202;
+	border-bottom: 2px solid #de0202;
+}
+.wst-shl-head .active select{
+	color:#de0202;
+}
+.wst-shl-select select{
+	color:#6a6b6d;
+}
+.wst-shl-select:after{
+	color:#6a6a6a;
+}
+.wst-shl-select.active:after{
+	color:#de0202;
+}
+.wst-shl-head .evaluate{
+	text-align:center;
+	position: relative;
+}
+.wst-shl-head .evaluate i{
+	width: 15px;
+    height: 15px;
+	position: absolute;
+	right:36px;
+	top:12px;
+}
+.wst-shl-head .evaluate .up{
+	background: url(../img/img_jgsx.png) 0px -19px no-repeat;
+	background-size: 285%;
+}
+.wst-shl-head .evaluate .up2{
+	background: url(../img/img_jgsx.png) -28px -19px no-repeat;
+	background-size: 285%;
+}
+.wst-shl-head .evaluate .down{
+	background: url(../img/img_jgsx.png) 0px 2px no-repeat;
+    background-size: 285%;
+}
+.wst-shl-head .evaluate .down2{
+	background: url(../img/img_jgsx.png) -28px 2px no-repeat;
+	background-size: 285%;
+}
+.wst-current{
+	color:#e77f74;
+}
+.wst-shl-list{
+	padding: 5px 10px;
+	margin-top:5px;
+	background:#ffffff;
+}
+.wst-shl-list .img{
+	float: left;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    display: block;
+    position: relative;
+}
+.wst-shl-list .img a{
+	width: 100%;
+    height: 100px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.wst-shl-list .img a img{
+	max-width: 100px;
+    max-height: 100px;
+}
+.wst-shl-list .info{
+	padding-left: 5px;
+}
+.wst-shl-list .title{
+	margin-bottom:5px;
+	font-size:0.175rem;
+	color:#363638;
+}
+.wst-shl-list p{
+	font-size:0.15rem;
+}
+.wst-shl-list p img{
+	width: 15px;
+}
+.wst-shl-list p span{
+	float: left;
+}
+.wst-shl-list p i{
+	float: left;
+	width:16px;
+	height:16px;
+	margin:2px 3px 0px 0px; 
+}
+.wst-shl-list p .bright{
+	background: url(../img/img_dpjpj.png) 0px 0px no-repeat;
+	background-size: 300%;
+}
+.wst-shl-list p .dark{
+	background: url(../img/img_dpjpj.png) -31px 0px no-repeat;
+	background-size: 300%;
+}
+/*品牌*/
+.wst-brands{
+	float:left;
+	width:50%;
+	height:90px;
+	margin-top:10px;
+}
+.wst-brands_img{
+	width:140px;
+	height:70px;
+	padding:5px 0px 5px 2px;
+	background:#ffffff;
+	box-shadow: 0 1px 2px #f1f0f0;
+}
+.wst-brands img{
+	float:left;
+	width: 100%;
+    max-width: 70px;
+    max-height: 70px;
+    border-radius:3px;
+}
+.wst-brands span{
+	float:left;
+	font-size:0.15rem;
+	line-height: 70px;
+	width:60px;
+	height:70px;
+	margin-left:4px;
+	padding-left:5px;
+	border-left: 1px solid #f1f1f1;
+}

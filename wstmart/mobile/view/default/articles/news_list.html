@@ -1,0 +1,67 @@
+{extend name="default/base" /}
+{block name="title"}商城快讯 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__ROOT__/wstmart/mobile/view/default/css/articles.css?v={$v}">
+{/block}
+{block name="header"}
+	<div id="info_list">
+    <header style="background:#ffffff;" class="ui-header ui-header-positive ui-border-b wst-header">
+        <i class="ui-icon-return" onclick="history.back()"></i><h1>商城快讯</h1>
+    </header>
+{/block}
+{block name="main"}
+<input type="hidden" name="" value="" id="currPage" autocomplete="off">
+<input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+
+    <script id="newsList">
+    {{# for(var i=0;i<d.length;i++){ }}
+      <div class="ui-whitespace news-time">{{d[i].createTime}}</div>
+      <div class="ui-whitespace news-content-box" onclick="viewNews({{d[i].articleId}})">
+         <div class="ui-nowrap ui-whitespace news-title">{{d[i].articleTitle}}</div>
+         <div class="ui-nowrap-multi ui-whitespace news-content">
+          {{d[i].articleContent}}
+         </div>
+      </div>
+    {{# } }}
+    </script>
+    <section class="ui-container" id="newsListBox">
+        
+    </section>
+
+
+
+
+
+{/* 遮盖层  */}
+<div class="wst-cover" id="cover"></div>
+{/* 分类层  */}
+<div class="wst-fr-box" id="frame">
+    <div class="title"><span>商城快讯</span><i class="ui-icon-close-page" onclick="javascript:dataHide();"></i><div class="wst-clear"></div></div>
+    <div class="content" id="content">
+
+        <div class="ui-whitespace news-time" id="createTime"></div>
+        <div class="ui-whitespace news-content-box">
+           <div class="ui-nowrap ui-whitespace news-title" id="articleTitle"></div>
+           <div class="ui-whitespace view-content" id="articleContent">
+            
+           </div>
+        </div>
+
+    </div>
+</div>
+
+{/block}
+{block name="include"}
+{include file="default/dialog" /}<!-- 对话框模板 -->
+{/block}
+{block name="js"}
+<script>
+$(function(){
+  {{if !empty($articleId) }}
+  viewNews({$articleId})
+  {{/if}}
+})
+</script>
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/articles/news_list.js?v={$v}'></script>
+{/block}

@@ -1,0 +1,55 @@
+{extend name="default/base" /}
+{block name="title"}我的提现账户 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/iziModal.css?v={$v}">
+<link rel="stylesheet"  href="__MOBILE__/css/cashconfigs.css?v={$v}">
+{/block}
+{block name="header"}
+	<div id="info_list">
+    <header style="background:#ffffff;" class="ui-header ui-header-positive ui-border-b wst-header">
+        <i class="ui-icon-return" onclick="history.back()"></i><h1>我的提现账户</h1>
+        <span class="add" onclick="editAddress()">添加</span>
+    </header>
+{/block}
+{block name="main"}
+
+
+
+<input type="hidden" name="" value="" id="currPage" autocomplete="off">
+<input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+<script type="text/html" id="list">
+    {{# for(var i=0;i<d.length;++i){ }}
+     <ul class="ui-row" >
+        <li class="ui-col ui-col-75" onclick="editAddress({{d[i].id}})">
+            开户行:{{d[i].bankName}}<br />
+            持卡人姓名:{{d[i].accUser}}<br />
+            银行卡账号:{{d[i].accNo}}<br />
+            <input type="hidden" id="addr_{{d[i].id}}" value="{{d[i].areaName}}">
+        </li>
+        <li class="ui-col ui-col-25 c-tr" onclick="del({{d[i].id}})"><span class="delete-icon"></span>删除</li>
+     </ul>
+    {{# } }}
+</script>
+<section class="ui-container" id="listBox">
+  
+</section>
+
+
+
+
+{include file="default/dialog" /}<!-- 对话框模板 -->
+{include file="default/users/cashconfigs/edit" /}<!-- 新增/编辑收货地址模板 -->
+
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/js/izimodal/iziModal.js'></script>
+<script type='text/javascript' src='__MOBILE__/users/cashconfigs/cashconfigs.js?v={$v}'></script>
+{/block}
+
+
+
+
+
+
+

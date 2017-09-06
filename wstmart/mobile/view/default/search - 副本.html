@@ -1,0 +1,199 @@
+{extend name="default/base" /}
+{block name="title"}店铺首页 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/swiper.min.css">
+<link rel="stylesheet"  href="__MOBILE__/css/search.css?v={$v}">
+<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">  
+{/block}
+{block name="header"}
+	<header class="ui-header ui-header-positive wst-in-header">
+	    <i class="ui-icon-return" onclick="history.back()"></i>
+    </header>
+    <div class="wst-in-search search" style="width: 80%;">
+        <input type="text" id="wst-search" value="" placeholder="" onfocus="search1()">
+        <span class="ui-icon-search" id="btn" onclick="javascript:WST.search(0);"></span>
+    </div>
+{/block}
+{block name="main"}
+	
+<div style="height: 42px;"></div>
+<div id="searchRecored">浏览记录 
+	<a href=""  onclick="return false" style="color: #000000;text-decoration: none;" id="clearAll" data-toggle="modal" data-target="#myModal">
+	删除浏览记录
+    </a>
+</div>
+
+<div id="showSearchList" class="showSearchList">
+
+</div>
+<template id="showSearchTemplate">
+	<li class="showLi">
+		haha
+	</li>
+</template>	
+<div class="modal fade" style="margin-top: 35%;" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">  
+        <div class="modal-content" style="width: 80%;margin: auto;text-align: center;">  
+            <div class="modal-header">  
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">  
+                    <span aria-hidden="true">×</span>  
+                </button> --> 
+                <h4 class="modal-title" id="myModalLabel">确认要删除浏览记录吗？</h4>  
+            </div>  
+            
+            <div class="modal-footer" style="text-align: center;">  
+                <button type="button" class="btn " data-dismiss="modal">取消</button>  
+                <button type="button" class="btn" id="confirmdel"  data-dismiss="modal">确认</button>  
+            </div>  
+        </div>  
+    </div>  
+</div>
+		
+<div id="searchList" style="padding-left: 10px;"></div>
+<div class="norecored">没有浏览记录</div>
+{/block}
+
+{block name="js"}
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>  
+<script src="https://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> 
+<script type="text/javascript">
+	  var hisTime;
+	  var hisItem;
+	  var resou;
+	   $("#wst-search").val("");
+	function init() {
+		hisTime = [];
+		hisItem = [];
+		for(var i = 0; i < localStorage.length; i++) {
+			if(!isNaN(localStorage.key(i))) {
+				hisTime.push(localStorage.key(i));
+			}
+		}
+
+		if(hisTime.length > 0) {
+			hisTime.sort(function(a, b) { return b - a });
+			// console.log(hisTime);
+			for(var y = hisTime.length - 1; y > -1; y--) {
+				localStorage.getItem(hisTime[y]).trim() && hisItem.push(localStorage.getItem(hisTime[y]));
+			}
+		}
+		if(hisItem.length==0){
+			$("#clearAll").hide();
+			$(".norecored").show()
+		}else{
+			$("#clearAll").show();
+			$(".norecored").hide()
+		}
+
+		$("#searchList").html("");
+		for(i = 0; i < hisItem.length; i++) {
+			//alert(hisItem);
+			$("#searchList").prepend('<div onclick="javascript:WST.search(0,this);">' + hisItem[i] + '</div>')
+		}
+	} 
+	init();
+	$("#btn").click(function() {
+
+		if($("#wst-search").val()==""){
+			$("#wst-search").val(resou);
+			$("#btn").trigger("click")
+		}
+		var time = (new Date()).getTime();
+		var val = $("#wst-search").val();
+		for(var k = 0; k < $("#searchList>span").length; k++) {
+			if($("#searchList>span").eq(k).html() == val) {
+				$("#searchList>span").eq(k).remove();
+				k--;
+			} 
+		}
+		for(var i = 0; i < localStorage.length; i++) {
+			if(val == localStorage.getItem(localStorage.key(i))) {
+				localStorage.removeItem(localStorage.key(i));
+			}
+		}
+		localStorage.setItem(time, val);		
+	})
+	  	$("#confirmdel").click(function(){
+	    	for(var f = 0;f<hisTime.length;f++){
+		      	localStorage.removeItem(hisTime[f]);
+		    }
+    	init();
+    	document.location.reload();//重新加载当前页面 
+	});	  
+	  	if($("#searchList>div").length>0){
+	  		resou =$("#searchList>div").eq(0).html();
+	  	}else{resou = ""}
+
+$("#wst-search").attr("placeholder",resou)
+
+$("#searchList>div").click(function() {
+	var val = $(this).html();
+	$("#wst-search").val(val);
+	$("#btn").trigger("click")
+})
+$("#wst-search").focus();
+
+// 新增模糊搜索
+// 延时器
+function search1(){  
+	if($("#wst-search").val().length > 0){
+		var table = document.getElementById("showSearchList");
+		var listArray = [];
+		var keyword=$("#wst-search").val();
+		while (table.hasChildNodes()){
+            table.removeChild(table.firstChild);
+        }
+		//此处调用搜索接口  
+		// WST.search(0);
+		$.post(WST.U('mobile/goods/getCats'),{keyword:keyword},function(data){
+	        var json = WST.toJson(data);
+	        dataArray = json.data; //把当前商品对应的数组保存起来
+	        for (var i = 0;i < dataArray.length; i++) {
+	        	listArray.push(dataArray[i].catName);
+	        }
+	        
+	        for (var j = 0; j <listArray.length; j++) {
+	        	var div = document.createElement('div');
+	        	div.setAttribute('class','aa');
+	        	div.innerHTML = listArray[j];
+	        	table.appendChild(div);
+	        }
+	        
+	        // for (var j = 0; j < listArray.length; j++) {
+	        // 	var content = document.getElementById('showSearchTemplate').content;
+        	// 	var showLi = content.querySelector('li.showLi');
+        	// 	showLi.innerHTML = listArray[j];
+        	// 	var child = content.cloneNode(true);
+        	// 	console.log(2);
+        	// 	table.appendChild(child);
+        	// 	console.log(3);
+	        // }
+	        
+	        // if(json.status==1){
+	          
+	        // }else{
+	            
+	        // }
+    	})
+	}
+
+}  
+// window.setTimeout(search1,500);   
+// $(function(){
+// 	if($("#showSearchList div").length > 0){
+// 		$(".mhss-box").css("display","block");
+// 		$("#searchRecored").css("display","none");
+// 		$("#searchList").css("display","none")
+// 	}else{
+// 		$(".mhss-box").css("display","none");
+// 		$("#searchRecored").css("display","block");
+// 		$("#searchList").css("display","block")
+// 	}
+
+// })
+
+ 
+</script>
+		
+{/block}

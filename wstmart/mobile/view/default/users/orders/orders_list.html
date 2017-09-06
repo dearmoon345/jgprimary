@@ -1,0 +1,395 @@
+{extend name="default/base" /}
+{block name="title"}我的订单 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/orders.css?v={$v}">
+{/block}
+{block name="header"}
+	<div id="info_list">
+    <header style="background:#ffffff;" class="ui-header ui-header-positive ui-border-b wst-header">
+        <i class="ui-icon-return" onclick="location.href='{:url('mobile/users/index')}'"></i><h1>我的订单</h1>
+    </header>
+{/block}
+{block name="main"}
+    <input type="hidden" name="" value="" id="currPage" autocomplete="off">
+    <input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+    <input type="hidden" name="" value="{$type}" id="type" autocomplete="off">
+
+    <script id="shopList" type="text/html">
+    {{# for(var i = 0; i < d.length; i++){ }}
+            <div class="order-item">
+                <div class="ui-row-flex ui-whitespace item-head" onclick="getOrderDetail({{d[i].orderId}})">
+                    <div class="ui-col ui-col-1 ui-nowrap-flex nowrap-flex-tt"><span>{{d[i].shopName}}</span><span class="order-tr-pic"></span></div>
+                    <div class="ui-col order-tr o-status">
+                        <!--订单右上角待收货,已收货-->
+                        {{ d[i].status }}
+                        {{# if($.inArray(d[i].orderStatus,[-3,-4,-5])!=-1){ }}
+						{{# if(d[i].payType==1 && d[i].isPay==1) { }} 
+                            {{# if(d[i].isRefund==1) { }} 
+                            (已退款)
+                            {{# }else{ }} 
+                            (未退款)
+                            {{# } }}
+						{{# } }} 
+                        {{# } }}
+                    </div>
+                </div>
+
+                {{# for(var g=0;g<d[i].list.length;g++){ }}
+                <div class="ui-row-flex ui-whitespace border-b" onclick="getOrderDetail({{d[i].orderId}})">
+                    <div class="ui-col">
+                        <img src="__ROOT__/{{d[i].list[g].goodsImg}}" class="o-Img"style="max-width: 120px;max-height: 120px;width: 0.82rem;height: 0.82rem;">
+                    </div>
+                    <div class="ui-col ui-col-3 o-gInfo">
+                        <p class="o-gName ui-nowrap-multi ui-whitespace">{{d[i].list[g].goodsName}}</p>
+                            <!--商品信息概览-->
+                        <!-- <p class="o-gName-shop">MO&CO官方旗舰店</p> -->
+                        <div class="o-gName-txt">
+                             <p class="o-gSpec ui-nowrap-flex ui-whitespace">规格：{{d[i].list[g].goodsSpecNames}}</p>
+                            <span class="ui-col order-tr o-gName-num">￥{{d[i].list[g].goodsPrice}} <span>x {{d[i].list[g].goodsNum}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                {{#  } }}
+
+
+                <div class="ui-btn-wrap" style="padding-top:5px;padding-bottom:5px;">
+                <div class="o-oListMoney">
+                    
+                     合计：<span>￥{{d[i].realTotalMoney}}
+                        <span>(含运费)</span>
+                    </span>
+                </div>
+                {{# if(d[i].orderStatus==-2){ }}
+                    <button class="ui-btn o-btn" onclick="choicePay({{d[i].orderNo}},0);">
+                        立即付款
+                    </button>
+                {{# } }}
+
+                {{# if(d[i].orderStatus==-2 || d[i].orderStatus==0){ }}
+                    <button class="ui-btn o-btn o-cancel-btn" onclick="showCancelBox('cancelOrder({{d[i].orderId}})')">
+                        取消订单
+                    </button>
+                {{# } }}
+
+                {{# if((d[i].orderStatus!=-1 || d[i].orderStatus==1) && d[i].orderStatus!=-2 && d[i].isComplain==0 ){ }}
+                    <button class="ui-btn o-btn o-cancel-btn" onclick="complain({{d[i].orderId}})">
+                        投诉
+                    </button>
+                {{# } }}
+
+                {{# if(d[i].orderStatus==2 && d[i].isAppraise==0) { }}
+                    <button class="ui-btn o-btn" onclick="toAppr({{d[i].orderId}})">
+                        评价
+                    </button>
+                {{# } }}
+                {{# if(d[i].isAppraise==1){ }}
+                    <button class="ui-btn o-btn" onclick="toAppr({{d[i].orderId}})">
+                        查看评价
+                    </button>
+                {{# } }}
+                
+
+                {{# if((d[i].allowRefund==1) && (d[i].orderStatus==-1 || d[i].orderStatus==-3)){ }}
+                <button class="ui-btn o-btn" onclick="showRefundBox({{d[i].orderId}})">
+                        申请退款
+                </button>
+                {{# } }}
+
+
+                {{# if(d[i].orderStatus==1){  }}
+                    <button class="ui-btn o-btn o-cancel-btn" onclick="showRejectBox('rejectOrder({{d[i].orderId}})')">
+                        拒收
+                    </button>
+                    <button class="ui-btn o-btn" onclick="WST.dialog('你确定已收货吗?','receive({{d[i].orderId}})')">
+                            确认收货
+                    </button>
+                {{# } }}
+				{{ d[i]['hook']?d[i]['hook']:"" }}
+                <div class="wst-clear"></div>
+                </div>
+            </div>
+    {{#  } }}
+    </script>
+
+    <section class="ui-container" id="shopBox">
+        <div class="ui-row-flex ui-whitespace order-tab">
+            <div class="ui-col ui-col tab-item {if $type==''}tab-curr{/if}" type="" >全部</div>
+            <!--待收货需要判断类型  目前-->
+            <div class="ui-col ui-col tab-item {if $type=='waitPay'}tab-curr{/if}" type="waitPay" >待付款</div>
+            <div class="ui-col ui-col tab-item {if $type=='waitSend'}tab-curr{/if}" type="waitSend" >待发货</div>
+            
+            <div class="ui-col ui-col tab-item {if $type=='waitReceive'}tab-curr{/if}" type="waitReceive" >待收货</div>
+            <div class="ui-col ui-col tab-item {if $type=='waitAppraise'}tab-curr{/if}" type="waitAppraise" >待评价</div>
+            <!--<div class="ui-col ui-col tab-item {if $type=='finish'}tab-curr{/if}" type="finish" >已完成</div>
+            <div class="ui-col ui-col tab-item {if $type=='abnormal'}tab-curr{/if}" type="abnormal" >已取消</div>-->
+        </div>
+
+        <div id="order-box">
+
+        </div>
+
+    </section>
+    </div>
+    
+{:hook('mobileDocumentOrderList')}
+
+<script type="text/html" id="detailBox">
+            <div id="detailBox">
+
+            <div class="ui-row-flex ui-whitespace detail-head">
+                <div class="ui-col ui-col ">订单号：{{d.orderNo}}</div>
+                <div class="ui-col order-tr o-status">
+                {{d.status}}
+                {{# if($.inArray(d.orderStatus,[-3,-4,-5])!=-1){ }}
+					{{# if(d.payType==1 && d.isPay==1) { }} 
+                    {{# if(d.isRefund==1) { }} 
+                    (已退款)
+                    {{# }else{ }} 
+                    (未退款)
+                    {{# } }}
+					{{# } }}
+                {{# } }}
+                </div>
+            </div>
+            {{# if(d.expressId>0){ }}
+            <div class="ui-row-flex ui-whitespace detail-head">
+                <div class="ui-col ui-col ">{{d.expressName}}：{{d.expressNo}}</div>
+            </div>
+            {{# } }}
+
+			{{# if(d.userName){ }}
+            <div class="ui-row-flex ui-whitespace ui-row-flex-ver d-uInfo">
+                <div class="ui-col d-uname">{{d.userName}} <span class="d-utel">{{d.userPhone}}</span></div>
+                <div class="ui-col d-uaddr ui-nowrap ui-whitespace">{{d.userAddress}}</div>
+            </div>
+			{{# } }}
+
+            {{# for(var i=0;i<d.goods.length;i++){ }}
+            <div class="ui-row-flex ui-whitespace border-b d-goodsitme">
+                <div class="ui-col">
+                    <img src="__ROOT__/{{d.goods[i].goodsImg}}" class="o-Img">
+                </div>
+                <div class="ui-col ui-col-3 o-gInfo">
+                    <p class="o-gName ui-nowrap-multi ui-whitespace">{{d.goods[i].goodsName}}</p>
+
+                
+                    <p class="o-gSpec d-gSpec">
+                    {{# if(d.goods[i].goodsSpecNames){ }}
+                    {{d.goods[i].goodsSpecNames.replace(/@@_@@/g,'<br />')}}
+                    {{# } }}
+                    </p>
+                    
+                </div>
+               <div class="ui-col order-tr">￥{{d.goods[i].goodsPrice}} <span style="display: block;">x {{d.goods[i].goodsNum}}</span></div> 
+            </div>
+			{{# if(d.goods[i].goodsType==1 && d.orderStatus==2){ }}
+				{{# for(var e=0;e<d.goods[i].extraJson.length;e++){ }}
+				<div class="ui-row-flex ui-whitespace ui-row-flex-ver d-uInfo">
+               		<div class="ui-col d-uname">卡券号：{{d.goods[i].extraJson[e].cardNo}}</div>
+					<div class="ui-col d-uname">卡券密码：{{d.goods[i].extraJson[e].cardPwd}}</div>
+				</div>
+				{{# } }}
+			{{# } }}
+            {{# } }}
+
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">下单时间</div>
+                <div class="ui-col ui-col order-tr">{{d.createTime}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">获得积分</div>
+                <div class="ui-col ui-col order-tr">{{d.orderScore}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">支付信息</div>
+                <div class="ui-col ui-col order-tr d-item-right"> {{d.payInfo}} </div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">配送信息</div>
+                <div class="ui-col ui-col order-tr d-item-right">{{d.deliverInfo}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">发票信息</div>
+                <div class="ui-col ui-col order-tr d-item-right">
+                    {{# if(d.isInvoice==1) { }}
+                    需要
+                    {{# } else{ }}
+                    不需要
+                    {{# } }}
+                </div>
+            </div>
+
+             {{# if(d.isInvoice==1) { }}
+                <div class="ui-row-flex ui-whitespace d-item">
+                    <div class="ui-col ui-col">发票抬头</div>
+                    <div class="ui-col ui-col-3 d-item-right">{{d.invoiceClient}}</div>
+                </div>
+            {{# } }}
+
+			{{# if(WST.blank(d.expressNo)!=''){ }}
+             <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">快递公司</div>
+				<div class="ui-col ui-col order-tr d-item-right"> {{d.expressName}} </div>
+            </div>
+             <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">快递号</div>
+				<div class="ui-col ui-col order-tr d-item-right"> {{d.expressNo}} </div>
+            </div>
+			{{# } }}
+
+            {{# if(d.isRefund==1){ }}
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">
+                退款信息<br />
+                <p class="d-item-right d-gSpec">退款金额：<span class="price">￥{{d.backMoney}}</span></p>
+                <p class="d-item-right d-gSpec">退款备注：{{d.refundRemark}}</p>
+                <p class="d-item-right d-gSpec">退款时间：{{d.refundTime}}</p>
+
+                </div>
+
+            </div>
+            {{# } }}
+
+
+             <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">订单备注</div>
+                <div class="ui-col ui-col-4 d-item-right">{{d.orderRemarks}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item" style="min-height:80px;">
+                <div class="ui-col ui-col">商品总额</div>
+                <div class="ui-col ui-col-4 order-tr">
+                    <p class="price">￥{{d.goodsMoney}}</p>
+                    <p class="price"><span class="title">运费：</span>￥{{d.deliverMoney}}</p>
+					<p class="price"><span class="title">积分抵扣金额：</span>￥-{{d.scoreMoney}}</p>
+                    <p>实付款：<span class="price">￥{{d.realTotalMoney}}</span></p>
+                </div>
+            </div>
+         </div> 
+</script>
+ {/* 遮盖层  */}
+    <div class="wst-cover" id="cover"></div>
+    {/* 订单详情层  */}
+    <div class="wst-fr-box" id="frame">
+        <div class="title" id="boxTitle"><span>订单详情</span><i class="ui-icon-close-page" onclick="javascript:dataHide();"></i><div class="wst-clear"></div></div>
+        <div class="content" id="content">
+
+        </div>
+    </div>
+{/block}
+{block name="include"}
+{include file="default/dialog" /}<!-- 对话框模板 -->
+<div class="ui-dialog" id="cancelBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+            <div class="ui-dialog-bd-title">请选择您取消订单的原因:</div>
+            <select id='reason'>
+               {volist name=":WSTDatas(1)" id="vo"}
+               <option value='{$vo["dataVal"]}'>{$vo["dataName"]}</option>
+               {/volist}
+            </select>
+            
+            <p class="cancel-btn-box">
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event0" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+            </p>
+        </div>
+    </div>        
+</div>
+
+
+
+<div class="ui-dialog" id="rejectBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+            <div class="ui-dialog-bd-title">请选择您拒收订单的原因:</div>
+            <select id='reject' onchange='javascript:changeRejectType(this.value)'>
+               {volist name=":WSTDatas(2)" id="vo"}
+               <option value='{$vo["dataVal"]}'>{$vo["dataName"]}</option>
+               {/volist}
+            </select>
+            <br />
+            <div id='rejectTr' style='display:none'>
+                 原因<font color='red'>*</font>：
+                 <textarea id='content' style='width:99%;height:80px;' maxLength='200'></textarea>
+            </div>
+
+            <p class="cancel-btn-box">
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event3" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+            </p>
+        </div>
+    </div>        
+</div>
+
+
+<div class="ui-dialog" id="refundBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+            请选择取消订单申请退款的原因，以便我们能更好的为您服务。<br />
+            原因:
+            <select id='refundReason' onchange='javascript:changeRefundType(this.value)'>
+               {volist name=":WSTDatas(4)" id="vo"}
+               <option value='{$vo["dataVal"]}'>{$vo["dataName"]}</option>
+               {/volist}
+            </select>
+            <br />
+            <div id='refundTr' style='display:none'>
+                 原因<font color='red'>*</font>：
+                 <textarea id='refundContent' style='width:99%;height:80px;' maxLength='200'></textarea>
+            </div>
+            <div style="margin-top:10px;">
+            退款金额 <input type='text' class="wst-pay-inp" id='money' maxLength='10' onkeyup="javascript:WST.isChinese(this,1)" ><br />
+            (金额不能超过<font color='red' id="realTotalMoney">0</font>)<br/>
+            (<span id="useScore">0</span>个积分抵扣<font color='red' id="scoreMoney">¥0</font>)
+            </div>
+
+            <p class="cancel-btn-box">
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event8" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+            </p>
+        </div>
+    </div>        
+</div>
+
+
+
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/users/orders/orders_list.js?v={$v}'></script>
+<script>
+var currPage = totalPage = 0;
+var loading = false;
+$(document).ready(function(){
+  getOrderList();
+  WST.initFooter('user');
+  // Tab切换卡
+  $('.tab-item').click(function(){
+      $(this).addClass('tab-curr').siblings().removeClass('tab-curr');
+      var type = $(this).attr('type');
+      $('#type').val(type);
+      reFlashList();
+  });
+  // 弹出层
+   $("#frame").css('top',0);
+
+    $(window).scroll(function(){  
+        if (loading) return;
+        if ((5 + $(window).scrollTop()) >= ($(document).height() - $(window).height())) {
+            currPage = Number( $('#currPage').val() );
+            totalPage = Number( $('#totalPage').val() );
+            if( totalPage > 0 && currPage < totalPage ){
+            	getOrderList();
+            }
+        }
+    });
+});
+</script>
+{/block}

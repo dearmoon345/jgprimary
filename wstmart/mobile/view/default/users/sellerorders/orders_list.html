@@ -1,0 +1,311 @@
+{extend name="default/base" /}
+{block name="title"}我的订单 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/orders.css?v={$v}">
+{/block}
+{block name="header"}
+	<div id="info_list">
+    <header style="background:#ffffff;" class="ui-header ui-header-positive ui-border-b wst-header">
+        <i class="ui-icon-return" onclick="location.href='{:url('mobile/users/index')}'"></i><h1>我的订单</h1>
+    </header>
+{/block}
+{block name="main"}
+    <input type="hidden" name="" value="" id="currPage" autocomplete="off">
+    <input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+    <input type="hidden" name="" value="{$type}" id="type" autocomplete="off">
+
+    <script id="shopList" type="text/html">
+    {{# for(var i = 0; i < d.length; i++){ }}
+            <div class="order-item">
+                <div class="ui-row-flex ui-whitespace item-head" onclick="getOrderDetail({{d[i].orderId}})">
+                    <div class="ui-col ui-col-1 ui-nowrap-flex">订单号：{{d[i].orderNo}}</div>
+                    <div class="ui-col order-tr o-status">
+                        {{ d[i].status }}
+                        {{# if($.inArray(d[i].orderStatus,[-3,-4,-5])!=-1){ }}
+						{{# if(d[i].payType==1 && d[i].isPay==1) { }} 
+                            {{# if(d[i].isRefund==1) { }} 
+                            (已退款)
+                            {{# }else{ }} 
+                            (未退款)
+                            {{# } }}
+						{{# } }} 
+                        {{# } }}
+                    </div>
+                </div>
+
+                {{# for(var g=0;g<d[i].list.length;g++){ }}
+                <div class="ui-row-flex ui-whitespace border-b" onclick="getOrderDetail({{d[i].orderId}})">
+                    <div class="ui-col">
+                        <img src="__ROOT__/{{d[i].list[g].goodsImg}}" class="o-Img">
+                    </div>
+                    <div class="ui-col ui-col-3 o-gInfo">
+                        <p class="o-gName ui-nowrap-multi ui-whitespace">{{d[i].list[g].goodsName}}</p>
+
+                        {{# if(d[i].list[g].isSpec==1){ }}
+                        <p class="o-gSpec ui-nowrap-flex ui-whitespace">规格：{{d[i].list[g].goodsSpecNames}}</p>
+                        {{# } }}
+
+                    </div>
+                    <div class="ui-col order-tr">￥{{d[i].list[g].goodsPrice}} <span>x {{d[i].list[g].goodsNum}}</span></div>
+                </div>
+                {{#  } }}
+
+
+                <div class="ui-btn-wrap" style="padding-top:5px;padding-bottom:5px;">
+                <div class="o-oListMoney">
+                    订单总价：<span>￥{{d[i].realTotalMoney}}</span>
+                </div>
+                <div class="wst-clear"></div>
+                {{# if(d[i].orderStatus==-2){ }}
+                    <button class="ui-btn o-btn" onclick="showEditMoneyBox('editOrderMoney({{d[i].orderId}})')">
+                        修改价格
+                    </button>
+                {{# } }}
+
+                {{# if(d[i].orderStatus==0){ }}
+                    <button class="ui-btn o-btn" onclick="toDeliver({{d[i].orderId}},{{d[i].deliverTypes}})">
+                        发货
+                    </button>
+                {{# } }}
+
+                {{# if(d[i].payType==1 && WST.blank(d[i].refundId)!=''){ }}
+                <button class="ui-btn o-btn" onclick="showRefundBox({{d[i].refundId}})">
+                        退款操作
+                </button>
+                {{# } }}
+
+
+
+
+                {{# if(d[i].isAppraise==1){ }}
+                    <button class="ui-btn o-btn" onclick="toAppr({{d[i].orderId}})">
+                        查看评价
+                    </button>
+                {{# } }}
+           		<div class="wst-clear"></div>
+                </div>
+            </div>
+    {{#  } }}
+    </script>
+
+    <section class="ui-container" id="shopBox">
+        <div class="ui-row-flex ui-whitespace order-tab">
+            <div class="ui-col ui-col tab-item {if $type==''}tab-curr{/if}" type="" >全部</div>
+            <div class="ui-col ui-col tab-item {if $type=='waitPay'}tab-curr{/if}" type="waitPay" >待付款</div>
+            <div class="ui-col ui-col tab-item {if $type=='waitDelivery'}tab-curr{/if}" type="waitDelivery" >待发货</div>
+            <div class="ui-col ui-col tab-item {if $type=='waitReceive'}tab-curr{/if}" type="waitReceive" >待收货</div>
+            <div class="ui-col ui-col tab-item {if $type=='finish'}tab-curr{/if}" type="finish" >已完成</div>
+            <div class="ui-col ui-col tab-item {if $type=='abnormal'}tab-curr{/if}" type="abnormal" >取消拒收</div>
+        </div>
+
+        <div id="order-box">
+
+        </div>
+
+    </section>
+    </div>
+
+<script type="text/html" id="detailBox">
+            <div id="detailBox">
+
+            <div class="ui-row-flex ui-whitespace detail-head">
+                <div class="ui-col ui-col ">订单号：{{d.orderNo}}</div>
+                <div class="ui-col order-tr o-status">
+                {{d.status}}
+                {{# if($.inArray(d.orderStatus,[-3,-4,-5])!=-1){ }}
+					{{# if(d.payType==1 && d.isPay==1) { }} 
+                    {{# if(d.isRefund==1) { }} 
+                    (已退款)
+                    {{# }else{ }} 
+                    (未退款)
+                    {{# } }}
+					{{# } }} 
+                {{# } }}
+                </div>
+            </div>
+            {{# if(d.expressId>0){ }}
+            <div class="ui-row-flex ui-whitespace detail-head">
+                <div class="ui-col ui-col ">{{d.expressName}}：{{d.expressNo}}</div>
+            </div>
+            {{# } }}
+
+            <div class="ui-row-flex ui-whitespace ui-row-flex-ver d-uInfo">
+                <div class="ui-col d-uname">{{d.userName}} <span class="d-utel">{{d.userPhone}}</span></div>
+                <div class="ui-col d-uaddr ui-nowrap ui-whitespace">{{d.userAddress}}</div>
+            </div>
+
+
+            {{# for(var i=0;i<d.goods.length;i++){ }}
+            <div class="ui-row-flex ui-whitespace border-b d-goodsitme">
+                <div class="ui-col">
+                    <img src="__ROOT__/{{d.goods[i].goodsImg}}" class="o-Img">
+                </div>
+                <div class="ui-col ui-col-3 o-gInfo">
+                    <p class="o-gName ui-nowrap-multi ui-whitespace">{{d.goods[i].goodsName}}</p>
+
+                
+                    <p class="o-gSpec d-gSpec">
+                    {{# if(d.goods[i].goodsSpecNames){ }}
+                    {{d.goods[i].goodsSpecNames.replace(/@@_@@/g,'<br />')}}
+                    {{# } }}
+                    </p>
+                    
+                </div>
+                <div class="ui-col order-tr">￥{{d.goods[i].goodsPrice}} <span>x {{d.goods[i].goodsNum}}</span></div>
+            </div>
+            {{# } }}
+
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">下单时间</div>
+                <div class="ui-col ui-col order-tr">{{d.createTime}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">获得积分</div>
+                <div class="ui-col ui-col order-tr">{{d.orderScore}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">支付信息</div>
+                <div class="ui-col ui-col order-tr d-item-right"> {{d.payInfo}} </div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">配送信息</div>
+                <div class="ui-col ui-col order-tr d-item-right">{{d.deliverInfo}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">发票信息</div>
+                <div class="ui-col ui-col order-tr d-item-right">
+                    {{# if(d.isInvoice==1) { }}
+                    需要
+                    {{# } else{ }}
+                    不需要
+                    {{# } }}
+                </div>
+            </div>
+
+             {{# if(d.isInvoice==1) { }}
+                <div class="ui-row-flex ui-whitespace d-item">
+                    <div class="ui-col ui-col">发票抬头</div>
+                    <div class="ui-col ui-col-3 d-item-right">{{d.invoiceClient}}</div>
+                </div>
+            {{# } }}
+
+            {{# if(d.isRefund==1){ }}
+            <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">
+                退款信息<br />
+                <p class="d-item-right d-gSpec">退款金额：<span class="price">￥{{d.backMoney}}</span></p>
+                <p class="d-item-right d-gSpec">退款备注：{{d.refundRemark}}</p>
+                <p class="d-item-right d-gSpec">退款时间：{{d.refundTime}}</p>
+
+                </div>
+
+            </div>
+            {{# } }}
+
+
+             <div class="ui-row-flex ui-whitespace d-item">
+                <div class="ui-col ui-col">订单备注</div>
+                <div class="ui-col ui-col-4 d-item-right">{{d.orderRemarks}}</div>
+            </div>
+
+            <div class="ui-row-flex ui-whitespace d-item" style="min-height:80px;">
+                <div class="ui-col ui-col">商品总额</div>
+                <div class="ui-col ui-col-4 order-tr">
+                    <p class="price">￥{{d.goodsMoney}}</p>
+                    <p class="price"><span class="title">运费：</span>￥{{d.deliverMoney}}</p>
+					<p class="price"><span class="title">积分抵扣金额：</span>￥-{{d.scoreMoney}}</p>
+                    <p>实付款：<span class="price">￥{{d.needPay}}</span></p>
+                </div>
+            </div>
+         </div> 
+</script>
+ {/* 遮盖层  */}
+    <div class="wst-cover" id="cover"></div>
+    {/* 订单详情层  */}
+    <div class="wst-fr-box" id="frame">
+        <div class="title" id="boxTitle"><span>订单详情</span><i class="ui-icon-close-page" onclick="javascript:dataHide();"></i><div class="wst-clear"></div></div>
+        <div class="content" id="content">
+
+        </div>
+    </div>
+{/block}
+{block name="include"}
+{include file="default/dialog" /}<!-- 对话框模板 -->
+
+
+{/* 发货 */}
+<div class="ui-dialog" id="deliveryBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+                            快递公司：<br>
+            <select id='expressId' style="height:30px;width:100%;">
+               {volist name="$express" id="vo"}
+               <option value='{$vo["expressId"]}'>{$vo["expressName"]}</option>
+               {/volist}
+            </select><br>
+                             快递号：<br>
+            <input type="text" id="expressNo" style="float: left;height:30px;width:100%;"/>
+
+            <p class="cancel-btn-box">
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event0" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+            </p>
+        </div>
+    </div>        
+</div>
+
+
+
+{/* 修改价格 */}
+<div class="ui-dialog" id="editMoneyBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+            新价格：<input type='text' id='newOrderMoney' maxLength='10' style='width:150px;height:30px' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberdoteKey(event,true)" onblur='javascript:WST.limitDecimal(this,2)'>
+
+            <p class="cancel-btn-box">
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event3" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+            </p>
+        </div>
+    </div>        
+</div>
+
+{/* 退款操作 */}
+<div class="ui-dialog" id="refundBox">
+    <div class="ui-dialog-cnt">
+        <div class="ui-dialog-bd">
+            订单号：<span id="refundOid"></span><br />
+            实付金额：<span id="realTotalMoney"></span><br />
+            退款金额：<span id="refundMoney" style="color:red;"></span><br />
+            退款积分：<span style="color:red;"><span id="useScore">0</span>个（积分抵扣<span id="scoreMoney">¥0</span>）</span><br />
+            商家意见：
+            <label><input type='radio' onclick='WST.showHide(0,"#tr")' name='refundStatus' id='refundStatus' value='1' checked/>同意</label>
+            <label style='margin-left:15px;'><input type='radio' onclick='WST.showHide(1,"#tr")' name='refundStatus' id='refundStatus' value='-1'/>
+                不同意
+            </label>
+            <div id='tr' style='display:none;margin-left:27px'>
+                 原因<font color='red'>*</font>：
+                 <textarea id='shopRejectReason' style='width:87%;height:80px;' maxLength='200'></textarea>
+            </div>
+
+
+            <p class="cancel-btn-box">
+            <button id="wst-event1" type="button" class="ui-btn-s wst-dialog-b1" data-role="button">取消</button>&nbsp;&nbsp;
+            <button id="wst-event8" type="button" class="ui-btn-s wst-dialog-b2">确定</button>
+            </p>
+        </div>
+    </div>        
+</div>
+
+
+
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/users/sellerorders/orders_list.js?v={$v}'></script>
+{/block}

@@ -1,0 +1,162 @@
+{extend name="default/shops/base" /}
+{block name="title"}卖家中心 - {:WSTConf('CONF.mallName')}{__block__}{/block}
+{block name="css"}
+<style>
+.wst-content{min-height:185px;}
+</style>
+{/block}
+{block name="content"}
+<div class='wst-shop-name'><a href='{:Url("home/shops/home","shopId=".$data["shop"]["shopId"])}'>{$data['shop']['shopName']}</a></div>
+<div class="wst-shop-info">
+	<span class="wst-shop-img">
+	  <a href="{:url('home/shops/home',array('shopId'=>$data['shop']['shopId']))}">
+	  <img src="__ROOT__/{:WSTImg($data['shop']['shopImg'])}" title="{$data['shop']['shopName']}" alt="{$data['shop']['shopName']}">
+	  </a>
+	</span>
+	<div class="wst-shop-na">
+		<div class="wst-shop-na2">
+		{volist name="$data['shop']['accreds']" id="v"}
+		<img src="__ROOT__/{$v['accredImg']}" title='{$v['accredName']}' alt='{$v['accredName']}'>
+		{/volist}
+		</div>
+		<span class="wst-shop-na3">上次登录：{:session('WST_USER.lastTime')}</span>
+		<span class="wst-shop-na3">店铺地址：{:WSTMSubstr($data['shop']['shopAddress'],0,10)}</span>
+	</div>
+	<div class="wst-shop-eva">
+		<p>商品评分</p>
+		<div class="wst-shop-evai">
+		{for start="0" end="$data['shop']['scores']['goodsScore']"}
+			<img src="__STATIC__/plugins/raty/img/star-on.png">
+		{/for}
+		{for start="1" end="6-$data['shop']['scores']['goodsScore']"}
+			<img src="__STATIC__/plugins/raty/img/star-off.png">
+		{/for}
+		</div>
+	</div>
+	<div class="wst-shop-eva">
+		<p>时效评分</p>
+		<div class="wst-shop-evai">
+		{for start="0" end="$data['shop']['scores']['timeScore']"}
+			<img src="__STATIC__/plugins/raty/img/star-on.png">
+		{/for}
+		{for start="1" end="6-$data['shop']['scores']['timeScore']"}
+			<img src="__STATIC__/plugins/raty/img/star-off.png">
+		{/for}
+		</div>
+	</div>
+	<div class="wst-shop-eva">
+		<p>服务评分</p>
+		<div class="wst-shop-evai">
+		{for start="0" end="$data['shop']['scores']['serviceScore']"}
+			<img src="__STATIC__/plugins/raty/img/star-on.png">
+		{/for}
+		{for start="1" end="6-$data['shop']['scores']['serviceScore']"}
+			<img src="__STATIC__/plugins/raty/img/star-off.png">
+		{/for}
+		</div>
+	</div>
+	<div class="wst-shop-con">
+		<p>电话：{$data['shop']['shopTel']}</p>
+		<p>QQ：{$data['shop']['shopQQ']}</p>
+		<p>服务时间：{php}echo date("H:i",strtotime($data['shop']['serviceStartTime']));{/php}-{php}echo date("H:i",strtotime($data['shop']['serviceEndTime']));{/php}</p>
+	</div>
+	<div class="wst-clear"></div>
+</div>
+<div class="wst-shop-split"></div>
+<div class="wst-shop-jrdt">
+	<div class="wst-title">今日动态</div>
+	<div>
+	    <div class='item'>
+			<div class='icon1'></div>
+			<div class='title'>待查看消息数<br/><span class='num'>{$data['stat']['messageCnt']}</span></div>
+		</div>
+		<div class='item'>
+			<div class='icon2'></div>
+			<div class='title'>今日销售金额<br/><span class='num'>{$data['stat']['saleMoney']}</span></div>
+		</div>
+		<div class='item'>
+			<div class='icon3'></div>
+			<div class='title'>今日订单数<br/><span class='num'>{$data['stat']['orderCnt']}</span></div>
+		</div>
+		<div class='item'>
+			<div class='icon4'></div>
+			<div class='title'>待发货订单<br/><span class='num'>{$data['stat']['waitDeliveryCnt']}</span></div>
+		</div>
+		<div class='item'>
+			<div class='icon5'></div>
+			<div class='title'>库存预警<br/><span class='num'>{$data['stat']['stockWarnCnt']}</span></div>
+		</div>
+	</div>
+</div>
+<div class="wst-shop-spxx">
+	<div class='wst-title'>商品信息</div>
+	<div>
+	    <div class='item'>
+	    	<div class="rbox">
+				<div class='icon1'></div>
+			</div>
+			<div class='title'>商品总数：<span class='num'>{$data['stat']['goodsCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon2'></div>
+			</div>
+			<div class='title'>上架商品：<span class='num'>{$data['stat']['onSaleCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon3'></div>
+			</div>
+			<div class='title'>待审核商品：<span class='num'>{$data['stat']['waitAuditCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon4'></div>
+			</div>
+			<div class='title'>仓库中的商品：<span class='num'>{$data['stat']['unSaleCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon5'></div>
+			</div>
+			<div class='title'>违规商品：<span class='num'>{$data['stat']['illegalCnt']}</span></div>
+		</div>
+	</div>
+</div>
+<div class="wst-shop-ddxx">
+	<div class='wst-title'>订单信息</div>
+	<div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon1'></div>
+			</div>
+			<div class='title'>待付款订单：<span class='num'>{$data['stat']['orderNeedpayCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon2'></div>
+			</div>
+			<div class='title'>待发货订单：<span class='num'>{$data['stat']['waitDeliveryCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon3'></div>
+			</div>
+			<div class='title'>待结束订单：<span class='num'>{$data['stat']['orderWaitCloseCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon4'></div>
+			</div>
+			<div class='title'>待退款订单：<span class='num'>{$data['stat']['orderRefundCnt']}</span></div>
+		</div>
+		<div class='item'>
+	    	<div class="rbox">
+				<div class='icon5'></div>
+			</div>
+			<div class='title'>待评价订单：<span class='num'>{$data['stat']['orderWaitAppraisesCnt']}</span></div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="js"}{/block}

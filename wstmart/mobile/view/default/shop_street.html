@@ -1,0 +1,103 @@
+{extend name="default/base" /}
+{block name="title"}店铺街 - {__block__}{/block}
+{block name="css"}
+<link rel="stylesheet"  href="__MOBILE__/css/swiper.min.css">
+<link rel="stylesheet"  href="__MOBILE__/css/shops_list.css?v={$v}">
+{/block}
+{block name="header"}
+	<header class="ui-header ui-header-positive wst-in-header">
+	    <i class="ui-icon-return" onclick="history.back()"></i>
+    </header>
+    <div class="wst-in-search search">
+    	<!--<span class="seleft"></span>-->
+    	<input type="text" id="wst-search" value="{$keyword}" placeholder="请输入店铺名称"/>
+    	<!--<span class="seright"></span><p></p>-->
+    	<span class="ui-icon-search" onclick="javascript:WST.search(1);"></span>
+    </div>
+{/block}
+{block name="main"}
+	 <input type="hidden" name="" value="{$keyword}" id="keyword" autocomplete="off">
+	 <input type="hidden" name="" value="" id="condition" autocomplete="off">
+	 <input type="hidden" name="" value="" id="desc" autocomplete="off">
+	 <input type="hidden" name="" value="" id="catId" autocomplete="off">
+	 <input type="hidden" name="" value="" id="currPage" autocomplete="off">
+     <input type="hidden" name="" value="" id="totalPage" autocomplete="off">
+     <section class="ui-container">
+     	<!--<div class="wst-shl-ads">
+     	   <div class="title">名铺抢购</div>
+		   <div class="wst-shl-adsb">
+			<div class="swiper-container">
+	          <div class="swiper-wrapper">
+	          	{wst:ads code="wx-ads-street" cache='86400' num='4'}
+	                <div class="swiper-slide" style="width:33.333333%;">
+	                	<div></div>
+	                    <a href="{$vo.adURL}"><img src="__ROOT__/{:WSTConf('CONF.goodsLogo')}" data-echo="__ROOT__/{:WSTImg($vo.adFile,2)}"></a>
+	                </div>
+	            {/wst:ads}
+	          </div>
+	        </div>
+	        </div>
+     	</div>-->
+     	<div class="ui-row-flex wst-shl-head">
+		    <div class="ui-col ui-col">
+           	<div class="ui-select wst-shl-select choice active">
+                <select onchange="javascript:orderSelect(this.value);">
+                    <option value="">主营</option>
+                    {volist name="goodscats" id="g"}
+                    	<option value="{$g['catId']}">{$g['catName']}</option>
+                    {/volist}
+                </select>
+            </div>
+		    </div>
+		    <div class="ui-col ui-col evaluate">
+		   		 <p class="choice sorts" status="down" onclick="javascript:orderCondition(this,1);">好评度<i class="down"></i></p>
+		    </div>
+		</div>
+		<ul class="ui-tab-content">
+	        <li id="shops-list"></li>
+	    </ul>
+     </section>
+<script id="list" type="text/html">
+{{# if(d && d.length>0){ }}
+{{# for(var i=0; i<d.length; i++){ }}
+	<div class="ui-row-flex wst-shl-list" onclick="goShopHome({{ d[i].shopId }})">
+		<div class="ui-col">
+		<div class="img j-imgAdapt"><a href="javascript:void(0);" onclick="goShopHome({{ d[i].shopId }})">
+		<img src="__ROOT__/{:WSTConf('CONF.goodsLogo')}" data-echo="__ROOT__/{{ d[i].shopImg }}" title="{{ d[i].shopName }}"></a></div>
+		</div>
+		<div class="ui-col ui-col-2 info">
+		<div class="title ui-nowrap">{{ d[i].shopName }}</div>
+			<p class="ui-nowrap">主营：{{ d[i].catshops }}</p>
+			<p>地址：{{ d[i].areas.areaName1 }} {{ d[i].areas.areaName2 }}</p>
+			<p><span>店铺评分：</span>
+			{{# for(var j=1; j<6; j++){ }}
+                {{# if(j <= d[i].totalScore){ }}
+                    <i class="bright"></i>
+				{{# }else{ }}
+                    <i class="dark"></i>
+				{{# } }}
+			{{# } }}
+			<div class="wst-clear"></div></p>
+			{{# if(d[i].accreds.length>0){ }}
+            	<p>
+				{{# for(var a=0; a<d[i].accreds.length; a++){ }}
+            		<img src="__ROOT__/{{ d[i].accreds[a].accredImg }}" title="{{ d[i].accreds[a].accredName }}">
+            	{{# } }}
+            	</p>
+			{{# } }}
+		</div>
+	</div>
+{{# } }}
+{{# }else{ }}
+	<ul class="ui-row-flex wst-flexslp">
+		<li class="ui-col ui-flex ui-flex-pack-center">
+		<p>对不起，没有相关店铺。</p>
+		</li>
+	</ul>
+{{# } }}
+</script>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__MOBILE__/js/swiper.jquery.min.js'></script>
+<script type='text/javascript' src='__MOBILE__/js/shops_list.js?v={$v}'></script>
+{/block}
