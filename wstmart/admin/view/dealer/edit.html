@@ -1,0 +1,92 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/webuploader/webuploader.css?v={$v}" />
+<style>
+body{overflow:hidden}
+</style>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__STATIC__/plugins/webuploader/webuploader.js?v={$v}' type="text/javascript"></script>
+<script src="__ADMIN__/wsysconfigs/wsysconfigs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<style>
+input[type="text"]{width:70%}
+textarea{width:70%;height:100px;}
+#wst-tab-5 input[type="text"]{width:50%}
+
+</style>
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+<div class="distributor_top">
+		
+		<!-- <a href="{:Url('admin/dealer/history_report')}">历史表报表</a> -->
+		 <a href="javascript:;" onclick="javascript:Excel();">生成报表（Excel格式）</a>
+		<!-- <a href="#" onclick="methodd('tableExcel1')">生成报表1（Excel格式）</a> -->
+	</div>
+<div id="maingrid">
+	
+</div>
+<script type="text/javascript">
+    function Excel(){
+        var box = WST.confirm({content:"您确定要导出列表吗?",yes:function(){
+        layer.close(box);
+        location.href=WST.U('admin/orders/excel');
+         }});
+    }  
+    function detail(salesendID){
+    	// alert(salesendID);
+    	location.href = 'distributor?salesendID='+salesendID;
+    } 
+</script>
+<script>
+$(function(){
+	// initSaleGrid();
+	var grid;
+// function initSaleGrid(){
+	grid = $("#maingrid").ligerGrid({
+		url:WST.U('admin/Dealer/indexList'),
+		pageSize:WST.pageSize,
+		pageSizeOptions:WST.pageSizeOptions,
+		height:'99%',
+        width:'100%',
+        rowHeight:65,
+        minColToggle:6,
+        rownumbers:true,
+        columns: [
+            { display: '头像', name: 'goodsName',width:60,align:'left',heightAlign:'left',isSort: false,render: function (rowdata, rowindex, value){
+                console.log(WST.conf.ROOT);
+            	return "<img style='height:60px;width:60px;' src='"+WST.conf.ROOT+"/"+rowdata['userPhoto']+"'>";
+            }},
+	        { display: '经销商ID', name: 'userId',isSort: false,render: function (rowdata, rowindex, value){
+	            return rowdata['userId'];
+	        }},
+	        { display: '姓名', name: 'userName',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['userName']+"</div>";
+	        }},
+	        { display: '省份', name: 'Province',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['Province']+"</div>";
+	        }},
+	        { display: '本月佣金', name: 'CommissionFee',isSort: false,render: function (rowdata, rowindex, value){
+	        
+	        	return "<div class='goods-valign-m'>"+rowdata['CommissionFee']+'<a href="#" onclick="detail('+rowdata['userId']+')">'+'详情</a>'+"</div>";
+	        }},
+	        // {:Url('dmin/dealer/distributor')}    <a href="#" onclick="detail()" >
+	        // { display: '所属分类', name: 'goodsCatName',isSort: false,render: function (rowdata, rowindex, value){
+	        // 	return "<div class='goods-valign-m'>"+rowdata['goodsCatName']+"</div>";
+	        // }},
+	        // { display: '销量', name: 'saleNum',isSort: false,render: function (rowdata, rowindex, value){
+	        // 	return "<div class='goods-valign-m'>"+rowdata['saleNum']+"</div>";
+	        // }},
+	        // { display: '操作', name: 'op',isSort: false,render: function (rowdata, rowindex, value){
+	        //     var h = "";
+	        //     h += "<div class='goods-valign-m'><a target='_blank' href='"+WST.U("home/goods/detail","id="+rowdata['goodsId'])+"'>查看</a> ";
+	        //     if(WST.GRANT.SJSP_04)h += "<a href='javascript:illegal(" + rowdata['goodsId'] + ")'>违规下架</a> ";
+	        //     if(WST.GRANT.SJSP_03)h += "<a href='javascript:del(" + rowdata['goodsId'] + ",1)'>删除</a></div> "; 
+	        //     return h;
+	        // }}
+        ]
+    });
+// }
+})
+</script>
+{/block}

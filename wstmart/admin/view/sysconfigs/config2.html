@@ -1,0 +1,118 @@
+<div id="wst-tab-2" title="运营设置" class='wst-tab'>
+     <table class='wst-form wst-box-top'>
+      <tr>
+	     <td colspan='2' class='head-ititle'>订单设置</td>
+	  </tr>
+	  <tr>
+	     <th width='150'>开启积分支付：</th>
+	     <td>
+	     <label>
+	         <input type='radio' id='isOpenScorePay1' name='isOpenScorePay' class='ipt' value='1' {if $object['isOpenScorePay']==1}checked{/if}>是
+	     </label>
+	     <label>
+	         <input type='radio' id='isOpenScorePay0' name='isOpenScorePay' class='ipt' value='0' {if $object['isOpenScorePay']==0}checked{/if}>否
+	     </label>
+	     </td>
+	  </tr>
+	  <tr>
+	     <th>开启下单获积分：</th>
+	     <td>
+	     <label>
+	         <input type='radio' id='isOrderScore1' name='isOrderScore' class='ipt' value='1' {if $object['isOrderScore']==1}checked{/if}>是
+	     </label>
+	     <label>
+	         <input type='radio' id='isOrderScore0' name='isOrderScore' class='ipt' value='0' {if $object['isOrderScore']==0}checked{/if}>否
+	     </label>
+	     </td>
+	  </tr>
+	  <tr>
+	     <th>开启评价获积分：</th>
+	     <td>
+	     <label>
+	         <input type='radio' id='isAppraisesScore1' name='isAppraisesScore' class='ipt' value='1' {if $object['isAppraisesScore']==1}checked{/if}>是
+	     </label>
+	     <label>
+	         <input type='radio' id='isAppraisesScore0' name='isAppraisesScore' class='ipt' value='0' {if $object['isAppraisesScore']==0}checked{/if}>否
+	     </label>
+	     </td>
+	  </tr>
+	  <tr>
+	     <th>评价获得积分：</th>
+	     <td>
+	     <input type="text" id='appraisesScore' class='ipt' value="{$object['appraisesScore']}" maxLength='5' style='width:40px;' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberdoteKey(event)"/>个积分
+	     <span style='color:gray;'>
+	     </span>
+	     </td>
+	  </tr>
+	  <tr>
+	  <tr>
+	     <th>金额兑换积分：</th>
+	     <td>
+	     下单后订单金额1元可获得<input type="text" id='moneyToScore' class='ipt' value="{$object['moneyToScore']}" maxLength='5' style='width:40px;' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberdoteKey(event)"/>个积分
+	     <span style='color:gray;'>
+	     </span>
+	     </td>
+	  </tr>
+	  <tr>
+	     <th>积分兑换金额：</th>
+	     <td>
+	     积分支付时<input type="text" id='scoreToMoney' class='ipt' value="{$object['scoreToMoney']}" maxLength='5' style='width:40px;' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberKey(event)"/>个积分抵1个金额
+	     </td>
+	  </tr>
+	  <tr>
+	     <th>结算方式：</th>
+	     <td>
+	     <label>
+	         <input type='radio' id='statementType' name='statementType' class='ipt' value='0' {if $object['statementType']==0}checked{/if}>即时结算
+	     </label>
+	     <label>
+	         <input type='radio' id='statementType' name='statementType' class='ipt' value='1' {if $object['statementType']==1}checked{/if}>统一结算
+	     </label>
+	     <span style='color:gray;'>(即时结算指用户确认收货就把钱打到商家钱包，统一结算指系统定时结算或者商家管理员手工结算)
+	     </span>
+	     </td>
+	  </tr>
+	  <tr style='display:none'>
+	     <th>积分与金钱兑换比例：</th>
+	     <td><input type="text" id='scoreCashRatio' class='ipt' value="{$object['scoreCashRatio']}" maxLength='20'/></td>
+	  </tr>
+	  <tr style='display:none'>
+	     <th>结算金额设置：</th>
+	     <td><input type="text" id='settlementStartMoney' class='ipt' value="{$object['settlementStartMoney']}" maxLength='10'/></td>
+	  </tr>
+	  <tr>
+	     <td colspan='2' class='head-ititle'>提现设置</td>
+	  </tr>
+	  <tr>
+	     <th>用户提现设置：</th>
+	     <td>至少<input type="text" id='drawCashUserLimit' class='ipt' value="{$object['drawCashUserLimit']}" maxLength='10' style='width:40px' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberKey(event)"/>元以上方能申请提现。</td>
+	  </tr>
+	  <tr>
+	     <th>商家提现设置：</th>
+	     <td>至少<input type="text" id='drawCashShopLimit' class='ipt' value="{$object['drawCashShopLimit']}" maxLength='10' style='width:40px' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberKey(event)"/>元以上方能申请提现。</td>
+	  </tr>
+	  <tr>
+	     <td colspan='2' class='head-ititle'>定时设置</td>
+	  </tr>
+	  <tr>
+	     <th>未支付订单失效时间：</th>
+	     <td>下单后<input type="text" id='autoCancelNoPayDays' class='ipt' value="{$object['autoCancelNoPayDays']}" maxLength='3' style='width:40px' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberKey(event)"/>小时</td>
+	  </tr>
+	  <tr>
+	     <th>自动收货期限：</th>
+	     <td>发货后<input type="text" id='autoReceiveDays' class='ipt' value="{$object['autoReceiveDays']}" maxLength='3' style='width:40px' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberKey(event)"/>天自动收货</td>
+	  </tr>
+	  <tr>
+	     <th>自动评价期限：</th>
+	     <td>确认收货后<input type="text" id='autoAppraiseDays' class='ipt' value="{$object['autoAppraiseDays']}" maxLength='3' style='width:40px' onkeyup="javascript:WST.isChinese(this,1)" onkeypress="return WST.isNumberKey(event)"/>天自动好评</td>
+	  </tr>
+	  <tr>
+	  	{if ($grant)}
+	     <td colspan='2' align='center'>
+	        <input type="button" value="保存" class='btn btn-blue' onclick='javascript:edit()'/>
+            <input type="reset" class='btn' value="重置" />
+	     </td>
+	     {/if}
+	  </tr>
+	 </table>
+</div>

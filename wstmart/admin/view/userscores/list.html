@@ -1,0 +1,33 @@
+{extend name="base" /}
+{block name='css'}
+<style>
+.l-text-wrapper{width:168px;float:left;}
+.tbr-h{height:30px;line-height:30px;}
+body{overflow: hidden;}
+</style>
+{/block}
+{block name="js"}
+<script src="__ADMIN__/userscores/userscores.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<div class="l-loading" style='display:block' id="wst-loading"></div>
+<div id="wst-tabs" style="width:100%; height:100%;overflow: hidden; border: 1px solid #D3D3d3;" class="liger-tab">
+   <div id="users" tabId="users"  title="{$object['userName']}({$object['loginName']})积分流水" class='wst-tab'  style="height: 99%">
+   <div class="wst-toolbar">
+  <div class='f-left tbr-h'>操作日期：</div>
+  <input type="text" style="margin:0px;vertical-align:baseline;" id="startDate" name="startDate" class="ipt" maxLength="20"  />
+  <div class='f-left tbr-m'>至</div>
+  <input type="text" style="margin:0px;vertical-align:baseline;" id="endDate" name="endDate" class="ipt" maxLength="20"  />
+  <button class="btn btn-blue" style='margin-top: 3px;margin-left: 5px' onclick='javascript:loadGrid({$object['userId']})'>查询</button>
+  <button class="btn btn-gray f-right" style='margin-top: 3px'onclick="javascript:history.go(-1)">返回</button> 
+  <button class="btn btn-green f-right" style='margin-top: 3px;margin-right:5px;'onclick="javascript:toAdd({$object['userId']})">新增</button> 
+  
+  <div style='clear: both'></div>
+  </div>
+   <div id='moneyGrid'></div>
+   </div>
+</div>
+<script>
+  $(function(){gridInit({$object['userId']});})
+</script>
+{/block}

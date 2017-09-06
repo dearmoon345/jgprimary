@@ -1,0 +1,103 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/webuploader/webuploader.css?v={$v}" />
+<style>
+body{overflow:hidden}
+</style>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__STATIC__/plugins/webuploader/webuploader.js?v={$v}' type="text/javascript"></script>
+<script src="__ADMIN__/wsysconfigs/wsysconfigs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<style>
+input[type="text"]{width:70%}
+textarea{width:70%;height:100px;}
+#wst-tab-5 input[type="text"]{width:50%}
+
+</style>
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+
+<!-- 经销商本月佣金详情 -->
+
+	<div class="distributor_top" >
+		<a href='{:Url("admin/Dealer/Province")}' class="left"><返回</a>
+	</div>
+	<div style="width: 100%;height: 30px;border: 1px #DDDDDD solid;line-height: 30px;padding-left: 21px;">本月佣金详情</div>
+	<input type="hidden" name="hidden" id='hidden' value="<?php echo $salesendID; ?>">
+<div id="maingrid">
+	
+</div>
+
+	<script>
+$(function(){
+	var salesendID = $("#hidden").attr('value'); 
+	// initSaleGrid();
+	 
+// function initSaleGrid(){
+	grid = $("#maingrid").ligerGrid({
+		url:WST.U('admin/Dealer/indexDetail','salesendID='+salesendID),
+		pageSize:WST.pageSize,
+		pageSizeOptions:WST.pageSizeOptions,
+		height:'99%',
+        width:'100%',
+        rowHeight:65,
+        minColToggle:6,
+        rownumbers:true,
+        columns: [
+         
+	        { display: '客户(经销商ID)', name: 'salesendID',isSort: false,render: function (rowdata, rowindex, value){
+	            return rowdata['salesendID'];
+	        }},
+	        { display: '订单流水', name: 'orderNo',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['orderNo']+"</div>";
+	        }},
+	        { display: '订单关闭时间', name: 'closeTime',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['closeTime']+"</div>";
+	        }},
+	        { display: '分佣时间', name: 'commisionTime',isSort: false,render: function (rowdata, rowindex, value){
+	        
+	        	return "<div class='goods-valign-m'>"+rowdata['commisionTime']+"</div>";
+	        }},
+	        { display: '实际支付时间', name: 'payTime',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['payTime']+"</div>";
+	        }},
+	        { display: '佣金', name: 'CommissionFee',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['CommissionFee']+"</div>";
+	        }},
+	        // { display: '操作', name: 'op',isSort: false,render: function (rowdata, rowindex, value){
+	        //     var h = "";
+	        //     h += "<div class='goods-valign-m'><a target='_blank' href='"+WST.U("home/goods/detail","id="+rowdata['goodsId'])+"'>查看</a> ";
+	        //     if(WST.GRANT.SJSP_04)h += "<a href='javascript:illegal(" + rowdata['goodsId'] + ")'>违规下架</a> ";
+	        //     if(WST.GRANT.SJSP_03)h += "<a href='javascript:del(" + rowdata['goodsId'] + ",1)'>删除</a></div> "; 
+	        //     return h;
+	        // }}
+        ]
+    });
+// }
+})
+</script>
+	<!-- <div class="distributor_list">
+		<table class="distributor public">
+			<tr class="top img"><td colspan="6">本月佣金详情</td></tr>
+			<tr class="top" >
+				<th class="customer center">客户(经销商ID)</th>
+				<th class="flowing  center">订单流水</th>
+				<th class="close center">订单关闭时间</th>
+				<th class="commission_time center">分佣时间</th>
+				<th class="actual center">实际支付时间</th>
+				<th class="commissionn center">佣金</th>
+			</tr>
+			<tr class="distributor_user1">
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+			</tr>
+		</table>
+	</div> -->
+
+<!-- 经销商本月佣金详情 -->
+{/block}

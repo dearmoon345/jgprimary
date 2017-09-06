@@ -1,0 +1,28 @@
+{extend name="base" /}
+{block name='css'}
+<style>
+body{overflow: hidden}
+</style>
+{/block}
+{block name="js"}
+<script src="__ADMIN__/logmoneys/logmoneys.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<div class="l-loading" style='display:block' id="wst-loading"></div>
+<div id="wst-tabs" style="width:100%; height:100%;overflow: hidden; border: 1px solid #D3D3d3;" class="liger-tab">
+   <div id="users" tabId="users"  title="会员" class='wst-tab'  style="height: 99%">
+   <div class="wst-toolbar">
+   账号：<input type='text' id='key1' placeholder='账号'/>
+   <button class="btn btn-blue" onclick="javascript:loadUserGrid(0)">查询</button>
+   </div>
+   <div id='userGrid'></div>
+   </div>
+   <div id="shops" tabId="shops"  title="商家" class='wst-tab'  style="height: 99%">
+   <div class="wst-toolbar">
+   账号：<input type='text' id='key2' placeholder='账号/店铺名称'/>
+   <button class="btn btn-blue" onclick="javascript:loadShopGrid(0)">查询</button>
+   </div>
+   <div id='shopGrid'></div>
+   </div>
+</div>
+{/block}

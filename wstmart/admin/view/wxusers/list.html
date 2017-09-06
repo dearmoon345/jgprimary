@@ -1,0 +1,30 @@
+{extend name="base" /}
+{block name="css"}{/block}
+{block name="js"}
+<script src="__ADMIN__/wxusers/wxusers.js?v={$v}" type="text/javascript"></script>
+<script>
+$(function(){initGrid();})
+</script>
+{/block}
+{block name="main"}
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+<div class="wst-toolbar">
+   用户名称：<input type='text' id='key' placeholder='用户名称'/>  
+   <button class="btn btn-blue" onclick='javascript:loadGrid(0)'>查询</button>
+{if WSTGrant('WX_ZDYCD_00')}
+   <button class="btn btn-green f-right" style="margin-right:10px;" onclick='javascript:wxSynchro();'>与微信用户管理同步</button>
+{/if}
+   <div style='clear:both'></div>
+</div>
+<div id="maingrid"></div>
+<div id='wxusersBox' style='display:none'>
+  <form id='wxusersForm' autocomplete="off">
+  <table class='wst-form wst-box-top'>
+     <tr>
+        <th width='100'>用户备注<font color='red'>*</font>：</th>
+        <td><input type='text' id='userRemark' name="userRemark" class='ipt' maxLength='20' style='width:200px;' data-msg-required="请输入备注" data-tip="请输入备注"/></td>
+     </tr>
+  </table>
+  </form>
+</div>
+{/block}

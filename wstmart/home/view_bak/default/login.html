@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>一键注册</title>
+</head>
+<body>
+<form name="validate" action="{:url('api/send')}" method="post" target="_blank">
+    手机号: <input type="text" name="mobile" />　　<input type="submit" value="获取验证码" />
+</form>
+<form name="register" action="{:url('api/reg')}" method="post">
+    手机号: <input type="text" name="mobile" />
+    验证码: <input type="text" name="code" />
+    <p><input type="submit" value="注册" /></p>
+</form>
+</body>
+</html>

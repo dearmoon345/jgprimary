@@ -1,0 +1,105 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/webuploader/webuploader.css?v={$v}" />
+<style>
+body{overflow:hidden}
+</style>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__STATIC__/plugins/webuploader/webuploader.js?v={$v}' type="text/javascript"></script>
+<script src="__ADMIN__/wsysconfigs/wsysconfigs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<style>
+input[type="text"]{width:70%}
+textarea{width:70%;height:100px;}
+#wst-tab-5 input[type="text"]{width:50%}
+
+</style>
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+
+<!-- 历史报表 -->
+<div class="distributor_top" >
+		<a href='{:Url("admin/Dealer/Province")}' class="left"><返回</a>
+</div>
+<div style="width: 100%;height: 30px;border: 1px #DDDDDD solid;line-height: 30px;padding-left: 21px;">历史报表</div>
+<div id="maingrid">
+	
+</div>
+<script>
+$(function(){
+	// initSaleGrid();
+	 
+// function initSaleGrid(){
+	grid = $("#maingrid").ligerGrid({
+		url:WST.U('admin/goods/saleByPage'),
+		pageSize:WST.pageSize,
+		pageSizeOptions:WST.pageSizeOptions,
+		height:'99%',
+        width:'100%',
+        rowHeight:65,
+        minColToggle:6,
+        rownumbers:true,
+        columns: [
+        	
+           
+	        { display: '月份', name: 'goodsName',isSort: false,render: function (rowdata, rowindex, value){
+	            return rowdata['goodsName'];
+	        }},
+	        { display: '报表链接', name: 'goodsSn',isSort: false,render: function (rowdata, rowindex, value){
+	        	return "<div class='goods-valign-m'>"+rowdata['goodsSn']+"</div>";
+	        }},
+	        // { display: '省份', name: 'shopPrice',isSort: false,render: function (rowdata, rowindex, value){
+	        // 	return "<div class='goods-valign-m'>"+rowdata['shopPrice']+"</div>";
+	        // }},
+	        // { display: '本月佣金', name: 'shopName',isSort: false,render: function (rowdata, rowindex, value){
+	        
+	        // 	return "<div class='goods-valign-m'>"+rowdata['shopName']+'<a href="{:Url("admin/wsysconfigs/distributor")}">详情</a>'+"</div>";
+	        // }},
+	        // { display: '所属分类', name: 'goodsCatName',isSort: false,render: function (rowdata, rowindex, value){
+	        // 	return "<div class='goods-valign-m'>"+rowdata['goodsCatName']+"</div>";
+	        // }},
+	        // { display: '销量', name: 'saleNum',isSort: false,render: function (rowdata, rowindex, value){
+	        // 	return "<div class='goods-valign-m'>"+rowdata['saleNum']+"</div>";
+	        // }},
+	        // { display: '操作', name: 'op',isSort: false,render: function (rowdata, rowindex, value){
+	        //     var h = "";
+	        //     h += "<div class='goods-valign-m'><a target='_blank' href='"+WST.U("home/goods/detail","id="+rowdata['goodsId'])+"'>查看</a> ";
+	        //     if(WST.GRANT.SJSP_04)h += "<a href='javascript:illegal(" + rowdata['goodsId'] + ")'>违规下架</a> ";
+	        //     if(WST.GRANT.SJSP_03)h += "<a href='javascript:del(" + rowdata['goodsId'] + ",1)'>删除</a></div> "; 
+	        //     return h;
+	        // }}
+        ]
+    });
+// }
+})
+</script>
+<!-- <div class="distributor_list" >
+	<div>
+		<table class="distributor" >
+			
+			<thead >
+				<tr class="top img"><td colspan="5">历史报表</td></tr>
+				<tr class="top">
+					<th class="distributor_id2 center" >月份</th>
+					<th class="name2 center" >报表链接</th>
+					
+				</tr>
+			</thead>
+			
+		</table>
+			
+		</div>
+		<div>
+			<table class="distributor public">
+				<tr class="distributor_user1">
+
+					<td class="distributor_id2 center" >aaa</td>
+					<td class="name2 center">aaa</td>
+					
+				</tr>				
+			</table>
+		</div>
+	</div> -->
+<!-- 历史报表 -->
+{/block}

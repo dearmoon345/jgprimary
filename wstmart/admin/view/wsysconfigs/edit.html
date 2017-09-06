@@ -1,0 +1,602 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/webuploader/webuploader.css?v={$v}" />
+<style>
+body{overflow:hidden}
+</style>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__STATIC__/plugins/webuploader/webuploader.js?v={$v}' type="text/javascript"></script>
+<script src="__ADMIN__/wsysconfigs/wsysconfigs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<style>
+input[type="text"]{width:70%}
+textarea{width:70%;height:100px;}
+#wst-tab-5 input[type="text"]{width:50%}
+
+</style>
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+
+<!-- <div class="l-panel-bar">            
+	 <div class="l-panel-bbar-inner">                
+		 <div class="l-bar-group  l-bar-message">
+		 	<span class="l-bar-text">显示从1到50，总 4777 条 。每页显示：50</span>
+		 </div>            
+		 <div class="l-bar-group l-bar-selectpagesize">
+			 <select name="rp">
+				 <option value="50">50</option>
+				 <option value="100">100</option>
+				 <option value="150">150</option>
+				 <option value="200">200</option>
+			 </select>
+		 </div>                
+	 	<div class="l-bar-separator"></div>                
+		 <div class="l-bar-group">                    
+		 	<div class="l-bar-button l-bar-btnfirst"><span class="l-disabled"></span></div>
+		 	<div class="l-bar-button l-bar-btnprev"><span class="l-disabled"></span></div>
+		 </div>                
+	 	<div class="l-bar-separator"></div>                
+		 <div class="l-bar-group">
+			 <span class="pcontrol"> 
+			 	<input size="4" value="1" style="width:20px" maxlength="3" type="text"> / <span>96</span>
+			 </span>
+		 </div>                
+		<div class="l-bar-separator"></div>                
+		<div class="l-bar-group"> 
+			<div class="l-bar-button l-bar-btnnext">
+				<span class=""></span>
+			</div>                    
+			<div class="l-bar-button l-bar-btnlast">
+				<span class=""></span>
+			</div>            
+		</div>                
+		<div class="l-bar-separator"></div>                
+		<div class="l-bar-group">                     
+			<div class="l-bar-button l-bar-btnload"><span class=""></span></div>                
+		</div>                
+		<div class="l-bar-separator"></div>                
+		<div class="l-clear"></div>            
+	 </div>         
+ </div>
+ -->
+<!-- 经销商列表页 -->
+
+
+
+<!-- 经销商列表页 -->
+<div >
+	<div class="distributor_top">
+		
+		<a href="{:Url('admin/wsysconfigs/history_report')}">历史表报表</a>
+		<a href="#" onclick="method('tableExcel')">生成报表（Excel格式）</a>
+		<a href="#" onclick="methodd('tableExcel1')">生成报表1（Excel格式）</a>
+	</div>
+	<div class="distributor_list" >
+		<div>
+			<table class="distributor" id="tableExcel">
+				
+				<thead >
+					<tr class="top img"><td colspan="5">经销商列表</td></tr>
+					<tr class="top">
+						<th class="Head_portrait center">头像</th>
+						<th class="distributor_id center">经销商ID</th>
+						<th class="name center">姓名</th>
+						<th class="province center">省份</th>
+						<th class="commission center">本月佣金 <span id="aa">(详情)</span></th>
+					</tr>
+					<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center">aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center">aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center">aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				</thead>
+				
+			</table>
+			
+		</div>
+	<!-- 	<div>
+			<table class="distributor public"  id="tableExcel">
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center">aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center">aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center">aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/distributor")}' class="xq">详情</a></td>
+				</tr>
+			</table>
+		</div> -->
+	
+
+
+
+		<div style="margin-top: 20px;">
+			<table class="distributor" id="tableExcel1">
+				<tr class="top img"><td colspan="5">省级经销商列表</td></tr>
+				<tr class="top" >
+					<th class="Head_portrait center">头像</th>
+					<th class="distributor_id center">经销商ID</th>
+					<th class="name center">姓名</th>
+					<th class="province center">省份</th>
+					<th class="commission center">本月佣金 <span>(详情)</span></th>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+			</table>
+		</div>
+		<!-- <div>
+			<table class="distributor public1" >
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id center" >aaa</td>
+					<td class="name center">aaa</td>
+					<td class="province center">aaa</td>
+					<td class="commission center">aaa&nbsp;<a href='{:Url("admin/wsysconfigs/provincial")}' class="xq">详情</a></td>
+				</tr>
+			</table>
+		</div> -->
+	</div>
+</div>
+    
+
+<!-- <div class="l-panel-bar">            
+	 <div class="l-panel-bbar-inner">                
+		 <div class="l-bar-group  l-bar-message">
+		 	<span class="l-bar-text">显示从1到50，总 4777 条 。每页显示：50</span>
+		 </div>            
+		 <div class="l-bar-group l-bar-selectpagesize">
+			 <select name="rp">
+				 <option value="50">50</option>
+				 <option value="100">100</option>
+				 <option value="150">150</option>
+				 <option value="200">200</option>
+			 </select>
+		 </div>                
+	 	<div class="l-bar-separator"></div>                
+		 <div class="l-bar-group">                    
+		 	<div class="l-bar-button l-bar-btnfirst"><span class="l-disabled"></span></div>
+		 	<div class="l-bar-button l-bar-btnprev"><span class="l-disabled"></span></div>
+		 </div>                
+	 	<div class="l-bar-separator"></div>                
+		 <div class="l-bar-group">
+			 <span class="pcontrol"> 
+			 	<input size="4" value="1" style="width:20px" maxlength="3" type="text"> / <span>96</span>
+			 </span>
+		 </div>                
+		<div class="l-bar-separator"></div>                
+		<div class="l-bar-group"> 
+			<div class="l-bar-button l-bar-btnnext">
+				<span class=""></span>
+			</div>                    
+			<div class="l-bar-button l-bar-btnlast">
+				<span class=""></span>
+			</div>            
+		</div>                
+		<div class="l-bar-separator"></div>                
+		<div class="l-bar-group">                     
+			<div class="l-bar-button l-bar-btnload"><span class=""></span></div>                
+		</div>                
+		<div class="l-bar-separator"></div>                
+		<div class="l-clear"></div>            
+	 </div>         
+ </div>
+ -->
+<!-- 经销商列表页 -->
+
+
+
+<!-- 经销商本月佣金详情 -->
+<div style="display: none;">
+	<div class="distributor_top" >
+		<a href="#" class="left"><返回</a>
+		<a href="#" class="right">历史表报表</a>
+		<a href="#" class="right">生成报表（Excel格式）</a>
+	</div>
+	<div class="distributor_list">
+		<table class="distributor">
+			<tr class="top img"><td colspan="6">本月佣金详情</td></tr>
+			<tr class="top" >
+				<th class="customer center">客户(经销商ID)</th>
+				<th class="flowing  center">订单流水</th>
+				<th class="close center">订单关闭时间</th>
+				<th class="commission_time center">分佣时间</th>
+				<th class="actual center">实际支付时间</th>
+				<th class="commissionn center">佣金</th>
+			</tr>
+			<tr class="distributor_user1">
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+				<td>aaa</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<!-- 经销商本月佣金详情 -->
+
+
+<!-- 省级经销佣金详情 -->
+<div style="display: none;">
+<div class="distributor_top" >
+		<a href="#" class="left"><返回</a>
+</div>
+<div class="distributor_list" >
+	<div>
+		<table class="distributor" >
+			
+			<thead >
+				<tr class="top img"><td colspan="5">经销商佣金详情</td></tr>
+				<tr class="top">
+					<th class="Head_portrait1 center" >头像</th>
+					<th class="distributor_id1 center" >经销商ID</th>
+					<th class="name1 center">姓名</th>
+					<th class="commission1 center">本月佣金 <span id="aa">(详情)</span></th>
+				</tr>
+			</thead>
+			
+		</table>
+			
+		</div>
+		<div>
+			<table class="distributor">
+				<tr class="distributor_user">
+					<td class="Head_portrait1 center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id1 center" >aaa</td>
+					<td class="name1 center">aaa</td>
+					<td class="commission1 center">aaa&nbsp;<span class="xq">详情</span></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait1 center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id1 center">aaa</td>
+					<td class="name1 center">aaa</td>
+					<td class="commission1 center">aaa&nbsp;<span class="xq">详情</span></td>
+				</tr>
+				<tr class="distributor_user">
+					<td class="Head_portrait1 center"><img src="" alt="" style="width:48px;height:48px;margin:0 auto;border:1px red solid;"></td>
+					<td class="distributor_id1 center">aaa</td>
+					<td class="name1 center">aaa</td>
+					<td class="commission1 center">aaa&nbsp;<span class="xq">详情</span></td>
+				</tr>
+				
+			</table>
+		</div>
+	</div>
+</div>
+<!-- 省级经销佣金详情 -->
+
+
+<!-- 历史报表 -->
+<div style="display: none;">
+<div class="distributor_top" >
+		<a href="#" class="left"><返回</a>
+</div>
+<div class="distributor_list" >
+	<div>
+		<table class="distributor" >
+			
+			<thead >
+				<tr class="top img"><td colspan="5">历史报表</td></tr>
+				<tr class="top">
+					<th class="distributor_id2 center" >月份</th>
+					<th class="name2 center" >报表链接</th>
+					
+				</tr>
+			</thead>
+			
+		</table>
+			
+		</div>
+		<div>
+			<table class="distributor">
+				<tr class="distributor_user1">
+
+					<td class="distributor_id2 center" >aaa</td>
+					<td class="name2 center">aaa</td>
+					
+				</tr>				
+			</table>
+		</div>
+	</div>
+</div>
+<!-- 历史报表 -->
+<!-- <script>
+	$('#aa').click(function(){
+		$('#bb').show();
+		$('#cc').hide();
+	});
+</script> -->
+<!-- <form autocomplete='off'>
+<div id="wst-tab-5" title="SEO设置" class='wst-tab'>
+     <table class='wst-form wst-box-top'>
+      <tr>
+	     <th width='150'>是否开启微信端：</th>
+	     <td>
+	     <label>
+	         <input type='radio' id='wxenabled' name='wxenabled' class='ipt' value='1' {if $object['wxenabled']==1}checked{/if}/>是
+	     </label>
+	     <label>
+	         <input type='radio' id='wxenabled' name='wxenabled' class='ipt' value='0' {if $object['wxenabled']==0}checked{/if}/>否
+	     </label>
+	     </td>
+	  </tr>
+	  <tr>
+	     <th width='150'>微信 APP ID：</th>
+	     <td><input type="text" id='wxAppId' class='ipt' value="{$object['wxAppId']}" maxLength='100'/></td>
+	  </tr>
+	  <tr>
+	     <th>微信 APP KEY：</th>
+	     <td><input type="text" id='wxAppKey' class='ipt' value="{$object['wxAppKey']}" maxLength='100'/></td>
+	  </tr>
+	  <tr>
+	     <th>微信验证代码：</th>
+	     <td><input type="text" id='wxAppCode' class='ipt' value="{$object['wxAppCode']}" maxLength='100'/></td>
+	  </tr>
+	  <tr>
+	     <th>微信公众号二维码：</th>
+	     <td>
+	     <div id='weixinCodePicker'>请上传微信公众号二维码</div><span id='weixinCodeMsg'></span>
+	     <div id="weixinCodePrevw">
+	     {if($object["weixinCode"])}
+	     	<img src='__ROOT__/{$object["weixinCode"]}' width='120' hiegth='120'/>
+	     {/if}
+	     </div>
+	     <input type="hidden" id='weixinCode' class='ipt' value='{$object["weixinCode"]}'/>
+	     </td>
+	  </tr>
+	  {if WSTGrant('WX_GZHSZ_04')}
+	  <tr>
+	     <td colspan='2' style='padding-left:300px'>
+	        <input type="button" value="保存" class='btn btn-blue' onclick='javascript:edit()'/>
+            <input type="reset" class='btn' value="重置" />
+	     </td>
+	  </tr>
+	  {/if}
+	 </table>
+</div>
+</form> -->
+<script language="JavaScript" type="text/javascript">
+
+        //第五种方法
+        var idTmr;
+        function  getExplorer() {
+            var explorer = window.navigator.userAgent ;
+            //ie
+            if (explorer.indexOf("MSIE") >= 0) {
+                return 'ie';
+            }
+            //firefox
+            else if (explorer.indexOf("Firefox") >= 0) {
+                return 'Firefox';
+            }
+            //Chrome
+            else if(explorer.indexOf("Chrome") >= 0){
+                return 'Chrome';
+            }
+            //Opera
+            else if(explorer.indexOf("Opera") >= 0){
+                return 'Opera';
+            }
+            //Safari
+            else if(explorer.indexOf("Safari") >= 0){
+                return 'Safari';
+            }
+        }
+        function method(tableid) {
+            if(getExplorer()=='ie')
+            {
+                var curTbl = document.getElementById(tableid);
+                var oXL = new ActiveXObject("Excel.Application");
+                var oWB = oXL.Workbooks.Add();
+                var xlsheet = oWB.Worksheets(1);
+                var sel = document.body.createTextRange();
+                sel.moveToElementText(curTbl);
+                sel.select();
+                sel.execCommand("Copy");
+                xlsheet.Paste();
+                oXL.Visible = true;
+
+                try {
+                    var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+                } catch (e) {
+                    print("Nested catch caught " + e);
+                } finally {
+                    oWB.SaveAs(fname);
+                    oWB.Close(savechanges = false);
+                    oXL.Quit();
+                    oXL = null;
+                    idTmr = window.setInterval("Cleanup();", 1);
+                }
+
+            }
+            else
+            {
+                tableToExcel(tableid)
+            }
+        }
+        function Cleanup() {
+            window.clearInterval(idTmr);
+            CollectGarbage();
+        }
+        var tableToExcel = (function() {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+                    template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+                    base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },
+                    format = function(s, c) {
+                        return s.replace(/{(\w+)}/g,
+                                function(m, p) { return c[p]; }) }
+            return function(table, name) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+                window.location.href = uri + base64(format(template, ctx))
+            }
+        })()
+
+         //第五种方法
+        var idTmr;
+        function  getExplorer() {
+            var explorer = window.navigator.userAgent ;
+            //ie
+            if (explorer.indexOf("MSIE") >= 0) {
+                return 'ie';
+            }
+            //firefox
+            else if (explorer.indexOf("Firefox") >= 0) {
+                return 'Firefox';
+            }
+            //Chrome
+            else if(explorer.indexOf("Chrome") >= 0){
+                return 'Chrome';
+            }
+            //Opera
+            else if(explorer.indexOf("Opera") >= 0){
+                return 'Opera';
+            }
+            //Safari
+            else if(explorer.indexOf("Safari") >= 0){
+                return 'Safari';
+            }
+        }
+        function methodd(tableid) {
+            if(getExplorer()=='ie')
+            {
+                var curTbl = document.getElementById(tableid);
+                var oXL = new ActiveXObject("Excel.Application");
+                var oWB = oXL.Workbooks.Add();
+                var xlsheet = oWB.Worksheets(1);
+                var sel = document.body.createTextRange();
+                sel.moveToElementText(curTbl);
+                sel.select();
+                sel.execCommand("Copy");
+                xlsheet.Paste();
+                oXL.Visible = true;
+
+                try {
+                    var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+                } catch (e) {
+                    print("Nested catch caught " + e);
+                } finally {
+                    oWB.SaveAs(fname);
+                    oWB.Close(savechanges = false);
+                    oXL.Quit();
+                    oXL = null;
+                    idTmr = window.setInterval("Cleanup();", 1);
+                }
+
+            }
+            else
+            {
+                tableToExcel(tableid)
+            }
+        }
+        function Cleanup() {
+            window.clearInterval(idTmr);
+            CollectGarbage();
+        }
+        var tableToExcel = (function() {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+                    template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+                    base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },
+                    format = function(s, c) {
+                        return s.replace(/{(\w+)}/g,
+                                function(m, p) { return c[p]; }) }
+            return function(table, name) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+                window.location.href = uri + base64(format(template, ctx))
+            }
+        })()
+    </script>
+{/block}

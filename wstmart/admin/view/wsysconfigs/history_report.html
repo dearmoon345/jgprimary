@@ -1,0 +1,53 @@
+{extend name="base" /}
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/plugins/webuploader/webuploader.css?v={$v}" />
+<style>
+body{overflow:hidden}
+</style>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__STATIC__/plugins/webuploader/webuploader.js?v={$v}' type="text/javascript"></script>
+<script src="__ADMIN__/wsysconfigs/wsysconfigs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<style>
+input[type="text"]{width:70%}
+textarea{width:70%;height:100px;}
+#wst-tab-5 input[type="text"]{width:50%}
+
+</style>
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+
+<!-- 历史报表 -->
+<div class="distributor_top" >
+		<a href='{:Url("admin/wsysconfigs/index")}' class="left"><返回</a>
+</div>
+<div class="distributor_list" >
+	<div>
+		<table class="distributor" >
+			
+			<thead >
+				<tr class="top img"><td colspan="5">历史报表</td></tr>
+				<tr class="top">
+					<th class="distributor_id2 center" >月份</th>
+					<th class="name2 center" >报表链接</th>
+					
+				</tr>
+			</thead>
+			
+		</table>
+			
+		</div>
+		<div>
+			<table class="distributor public">
+				<tr class="distributor_user1">
+
+					<td class="distributor_id2 center" >aaa</td>
+					<td class="name2 center">aaa</td>
+					
+				</tr>				
+			</table>
+		</div>
+	</div>
+<!-- 历史报表 -->
+{/block}

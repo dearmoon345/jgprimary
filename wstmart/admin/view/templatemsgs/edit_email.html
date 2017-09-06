@@ -1,0 +1,43 @@
+{extend name="base" /}
+{block name="js"}
+<script src="__STATIC__/plugins/kindeditor/kindeditor.js?v={$v}" type="text/javascript" ></script>
+<script src="__ADMIN__/templatemsgs/templatemsgs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+<form autocomplete='off'>
+<input type='hidden' id='id' class='ipt' value="{$object['id']}"/>
+<input type='hidden' id='tplCode' class='ipt' value="{$object['tplCode']}"/>
+<table class='wst-form wst-box-top'>
+  <tr>
+     <th width='120'>发送时机：</th>
+     <td>
+         {volist name=':WSTDatas(7)' id='vo'}
+         {if $vo['dataVal']==$object['tplCode']}{$vo['dataName']}{/if}
+         {/volist}
+     </td>
+  </tr>
+  <tr>
+     <th>内容：</th>
+     <td>
+     <textarea id='tplContent' name='tplContent' style='width:70%;height:100px;' class='ipt' maxLength='150'>{$object['tplContent']}</textarea>
+     </td>
+  </tr>
+  <tr>
+     <th valign="top">说明：</th>
+     <td id='tplDesc'>{$object['tplDesc']}</td>
+  </tr>
+  <tr>
+     <td colspan='2' align='center'>
+       <input type='button' value='保存' class='btn btn-blue' onclick='javascript:save(1)'>
+       <input type='button' value='返回' class='btn' onclick='javascript:history.go(-1)'>
+     </td>
+  </tr>
+</table>
+</form>
+<script>
+$(function(){
+   initEditor();
+});
+</script>
+{/block}

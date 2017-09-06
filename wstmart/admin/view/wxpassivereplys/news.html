@@ -1,0 +1,39 @@
+{extend name="base" /}
+{block name="js"}
+<script src="__ADMIN__/wxpassivereplys/news.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+<div class="l-loading" style='display:block' id="wst-loading"></div>
+{if WSTGrant('WX_TWXX_01')}
+<div class="wst-toolbar">
+   <button class="btn btn-green f-right" onclick="javascript:location.href='<?=url("wxpassivereplys/newsEdit")?>'">新增</button>
+   <div style="clear:both"></div>
+</div>
+{/if}
+<script id="tblist" type="text/html">
+{{# var dl = d['Rows'];for(var i = 0; i < dl.length; i++){ }}
+<div class='style-box'>
+   <div class='style-img'>
+     <a href="javascript:void(0)">
+     <img src='{{dl[i]["picUrl"]}}'/>
+     </a>
+   </div>
+   <div class='style-txt'>关键字：{{dl[i]['keyword']}}</div>
+   <div class='style-txt'>标题：{{dl[i]['title']}}</div>
+   <div class='style-author'>描述：{{dl[i]['description']}}</div>
+   <div class='style-op'>
+	   {{#  if(WST.GRANT.WX_TWXX_02){ }}<input class='btn btn-blue' onclick="toEdit({{dl[i]['id']}})" type='button' value='编辑' />{{# } }}
+	   {{#  if(WST.GRANT.WX_TWXX_03){ }}<input class='btn btn-blue' onclick="toDel({{dl[i]['id']}})" type='button' value='删除' />{{# } }}
+   </div>
+</div>
+{{#}}}
+</script>
+<div id="maingrid"></div>
+
+
+<script>
+$(function (){ 
+  listQuery('home');
+});
+</script>
+{/block}

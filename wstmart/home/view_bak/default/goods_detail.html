@@ -1,0 +1,494 @@
+{extend name="default/base" /}
+{block name="title"}{$goods['goodsName']} - {:WSTConf('CONF.mallName')}{__block__}{/block}
+{block name="meta"}
+<meta name="description" content="{$goods['goodsName']}">
+<meta name="Keywords" content="{$goods['goodsSeoKeywords']}">
+{/block}
+{block name="css"}
+<link href="__STYLE__/css/goods.css?v={$v}" rel="stylesheet">
+{/block}
+<script type="text/javascript" src="__STYLE__/js/jquery.min.js"></script>
+{block name="nav"}
+	{include file="default/header" /}
+{/block}
+{block name="main"}
+<div class='wst-w' style='margin-bottom:0px'>
+<div class='wst-filters'>
+   <div class='item' style="border-left:2px solid #df2003;padding-left: 8px;">
+      <a class='link' href='__ROOT__'>首页</a>
+      <i class="arrow">></i>
+   </div>
+   {volist name=":WSTPathGoodsCat($goods['goodsCatId'])" id='vo'}
+   <div class='wst-lfloat'>
+   	<div class='item dorpdown'>
+     <div class='drop-down'>
+        <a class='link' href='{:Url("home/goods/lists",["cat"=>$vo["catId"]])}'>{$vo['catName']}</a>
+        <i class="drop-down-arrow"></i>
+     </div>
+     <div class="dorp-down-layer">
+         {volist name=":WSTGoodsCats($vo['parentId'])" id='vo2'}
+         <div class="{$vo['parentId']>0?'cat2':'cat1'}"><a href='{:Url("home/goods/lists","cat=".$vo2["catId"])}'>{$vo2['catName']}</a></div>
+         {/volist}
+	</div>
+	</div>
+	<i class="arrow">></i>
+   </div>
+   {/volist}
+   <div class='wst-clear'></div>
+</div>
+</div>
+<div class='wst-w'>
+   <div class='wst-container' style='border:1px solid #eee'>
+      <div class='goods-img-box'>
+          <div class="goods-img spec-preview" id="preview">
+          	<img title="{$goods['goodsName']}" alt="{$goods['goodsName']}" src="__ROOT__/{:WSTImg($goods['goodsImg'])}" class="cloudzoom" data-cloudzoom="zoomImage:'__ROOT__/{$goods['goodsImg']}'" height="350" width="350">
+          </div>
+          <div class="goods-pics">
+            <a class="prev">&lt;</a>
+            <a class="next">&gt;</a>
+            <div class="items">
+               <ul>
+               {volist name="$goods['gallery']" id='vo'}
+                   <li><img title="{$goods['goodsName']}" alt="{$goods['goodsName']}" class='cloudzoom-gallery' src="__ROOT__/{:WSTImg($vo)}" data-cloudzoom="useZoom: '.cloudzoom', image:'__ROOT__/{:WSTImg($vo)}', zoomImage:'__ROOT__/{$vo}' " width="60" height="60"></li>
+               {/volist}
+			   </ul>	
+			</div>
+         </div>
+      </div>
+      <div class='intro'>
+          <div class='intro-name'>
+          <h2>{$goods['goodsName']}</h2> 
+          <span class='tips'>{$goods['goodsTips']}</span>  
+          </div>    
+          <div class='summary'>
+          	<div class="infol">
+             <div class='item'>
+               <div class='dt'>市场价：</div>
+               <div class='dd market-price' id='j-market-price'>￥{$goods['marketPrice']}</div>
+             </div>
+             <div class='item'>
+               <div class='dt'>价格：</div>
+               <div class='dd price' id='j-shop-price'>￥{$goods['shopPrice']}</div>
+             </div>
+             <div class='goods-intro-bg'>
+               <div class='item'>
+                 <div class='dt'>商品评分：</div>
+                 <div class='dd'>
+          		    {for start="0" end="$goods['scores']['totalScores']"}
+          					<img src="__STATIC__/plugins/raty/img/star-on.png">
+          				{/for}
+          				{for start="1" end="6-$goods['scores']['totalScores']"}
+          					<img src="__STATIC__/plugins/raty/img/star-off.png">
+          				{/for}
+          				<div class='appraise'>累计评价：<span class='appraise-num'>{$goods['appraiseNum']}</span>（销量：<span class='appraise-num'>{$goods['saleNum']}</span>）</div>
+          				</div>
+               </div>
+               <div class='item'>
+                 <div class='dt'>商品编号：</div>
+                 <div class='dd'>{$goods['goodsSn']}</div>
+               </div>
+               <div class='item'>
+                 <div class='dt'>运费：</div>
+                 <div class='dd'>{if $goods['isFreeShipping']==1}免运费{else}系统计算{/if}</div>
+               </div>
+               <div class="infor">
+                <div id='qrcode' style='width:125px;height:125px;margin-left:18px;'></div>
+                <div style='text-align: center;'>微信端扫购有惊喜</div>
+               </div>
+             </div>
+             </div>             
+             <div class='wst-clear'></div>
+          </div>
+          <div class='spec'>
+             {if condition = "$goods['isSpec'] == 1"}
+             {volist name="$goods['spec']" id='vo'}
+             <div class='item'>
+               <div class='dt'>{$vo['name']}：</div>
+               <div class='dd'>
+               {volist name="$vo['list']" id='vo2'}
+                  {if $vo2['itemImg']!=''}
+                  <div class='j-option img' data-val="{$vo2['itemId']}" style='height:28px;padding:0px;'><img class="cloudzoom-gallery" width="28" height="28" src="__ROOT__/{:WSTImg($vo2['itemImg'])}" data-cloudzoom="useZoom: '.cloudzoom', image:'__ROOT__/{:WSTImg($vo2['itemImg'])}', zoomImage:'__ROOT__/{$vo2['itemImg']}' "  title="{$vo2['itemName']}" alt="{$vo2['itemName']}"/><i></i></div>
+                  {else}
+                  <div class='j-option' data-val="{$vo2['itemId']}">{$vo2['itemName']}<i></i></div>
+                  {/if}
+               {/volist}
+               </div>
+               <div class='wst-clear'></div>
+             </div>
+             {/volist}
+              {elseif condition = "($goods['isSpec'] == 2 OR $goods['isSpec'] == 3) AND (isset($goodsSpec))"}
+              <style>
+                  td {
+                      padding: 5px;
+                      width: 75px;
+                      height: 25px;
+                  }
+
+                  button {
+                      width: 75px;
+                      height: 25px;
+                  }
+
+                  .rect {
+                      border: solid 1px #808080;
+                      background-color: #c0c0c0;
+                  }
+
+                  .rect_select {
+                      border: solid 1px #D84C29;
+                      background-color: #D84C29;
+                  }
+
+                  .rect_disable {
+                      border: solid 1px #ececce;
+                      background-color: #ECECCE;
+                      color: gray
+                  }
+              </style>
+              <div id="goodsSpec" style="display: none;">{$goodsSpec}</div>
+              <!--<div id="box">
+                  <div> <span class="dt">颜色: </span><span id="color" class="dd"></span></div><br />
+                  <div> <span class="dt">尺码：</span><span id="size" class="dd"></span></div>
+              </div>-->
+              <table id="table_genre"></table>
+              <script type="text/javascript">
+                  var table = document.getElementById("table_genre");
+                  Array.prototype.distinct = function () {
+                      return this.reduce(function (dst, src) {
+                          if (dst.indexOf(src) == -1)
+                              dst.push(src);
+                          return dst;
+                      }, []);
+                  }
+                  var data = [];
+                  var objects = $('#goodsSpec').html();
+                  console.log(objects);
+                  data = eval(objects);
+                  console.log(data);
+                  var rank = 65535;
+                  for (var i = 0; i < data.length; i++) {
+                      if (data[i].length < rank)
+                          rank = data[i].length;
+                  }
+                  console.log(data.length);
+                  var list = new Array();
+                  var current = new Array(rank);
+                  function button_click(id) {
+                      var btn = document.getElementById(id);
+                      var idx = parseInt(btn.name);
+                      if (btn.classList.contains("rect_select")) {
+                          btn.classList.add("rect");
+                          btn.classList.remove("rect_select");
+                          current[idx] = undefined;
+                      } else {
+                          btn.classList.remove("rect");
+                          btn.classList.add("rect_select");
+                          current[idx] = btn.innerText;
+                      }
+                      // ��ͬһ�е�����ѡ���Ϊ��ѡ��״̬
+                      for (var i = 0; i < list.length; i++) {
+                          if (list[i] == id)
+                              continue;
+                          var b = document.getElementById(list[i]);
+                          if (parseInt(b.name) == idx) {
+                              b.classList.remove("rect_select");
+                              b.classList.add("rect");
+                          }
+                      }
+                      for (var t = 0; t < rank; t++) {
+                          if (t == idx)
+                              continue;
+                          var lsm = new Array();
+                          for (var n = 0; n < data.length; n++) {
+                              lsm[n] = new Array();
+                              for (var i = 0; i < data[n].length; i++) {
+                                  lsm[n].push(data[n][i]);
+                              }
+                          }
+                          var m = 0;
+                          while (m < rank) {
+                              if (m != t) {
+                                  var tmp = new Array();
+                                  for (var n = 0; n < lsm.length; n++) {
+                                      var cur = lsm[n];
+                                      if (current[m] == undefined || cur[m] == current[m]) {
+                                          var arr = new Array();
+                                          for (var i = 0; i < cur.length; i++) {
+                                              arr.push(cur[i]);
+                                          }
+                                          tmp.push(arr);
+                                      }
+                                  }
+                                  lsm = tmp;
+                              }
+                              m++;
+                          }
+                          var ava = new Array();
+                          for (var n = 0; n < lsm.length; n++) {
+                              ava.push(lsm[n][t]);
+                          }
+                          ava = ava.distinct();
+                          for (var i = 0; i < list.length; i++) {
+                              var b = document.getElementById(list[i]);
+                              if (parseInt(b.name) == t) {
+                                  if (ava.find((r) => r == b.innerText))
+                                  {
+                                      b.disabled = "";
+                                      b.classList.remove("rect_disable");
+                                      b.classList.add("rect");
+                                  }
+                              else
+                                  {
+                                      b.disabled = "disabled";
+                                      b.classList.remove("rect");
+                                      b.classList.remove("rect_select");
+                                      b.classList.add("rect_disable");
+                                  }
+                              }
+                          }
+                      }
+
+                      var str = "Selected:";
+                      for (var i = 0; i < current.length; i++) {
+                          if (current[i] != undefined) {
+                              str += " " + current[i];
+                          }
+                      }
+                      /* document.getElementById("table_value").innerText = str;*/
+                  }
+
+                  for (var i = 0; i < rank; i++) {
+                      var tr = "<tr><td class='dt'></td>";
+                      var t = data.map((r) => r[i]).distinct();
+                      for (var k = 0; k < t.length; k++) {
+                          var ran = "btn" + Math.random();
+                          list.push(ran);
+                          tr += "<td><button class='rect'" + "name='" + i + "'id='" + ran + "'onclick='button_click(\"" + ran + "\")'>" + t[k] + "</button></td>";
+                      }
+                      tr += "</tr>";
+                      table.innerHTML += tr;
+                  }
+                  $('#table_genre').find("tr").eq(0).find("td").eq(0).html("颜色:");
+                  $('#table_genre').find("tr").eq(1).find("td").eq(0).html("尺寸:");
+                  $('#table_genre').find("tr").eq(0).find("td").eq(0).css("margin","0 0 0 -12px");
+                  $('#table_genre').find("tr").eq(1).find("td").eq(0).css("margin","0 0 0 -12px");
+              </script>
+             {/if}
+
+          </div>
+          <div class='buy'>
+             <div class='item'>
+                <div class='dt'>数量：</div>
+                <div class='dd'>
+	                <a href='#none' class='buy-btn' id='buy-reduce' style='color:#ccc;' onclick='javascript:WST.changeIptNum(-1,"#buyNum","#buy-reduce,#buy-add")'>-</a>
+	                <input type='text' id='buyNum' class='buy-num' value='1' data-min='1' autocomplete="off" onkeyup='WST.changeIptNum(0,"#buyNum","#buy-reduce,#buy-add")' onkeypress="return WST.isNumberKey(event);" maxlength="6"/>
+	                <a href='#none' class='buy-btn' id='buy-add' onclick='javascript:WST.changeIptNum(1,"#buyNum","#buy-reduce,#buy-add")'>+</a>
+                    &nbsp; &nbsp;（库存：<span id='goods-stock'>0</span>&nbsp;{$goods['goodsUnit']}）
+                </div>
+             </div>
+             <div class='item'>
+                <div class='dt'>服务：</div>
+                <div class='dd'>服务由  <a href='{:Url("home/shops/home","shopId=".$shop["shopId"])}' target='_blank'>{$shop['shopName']}</a> 发货并提供 售后服务。</div>
+             </div>
+             <div class='item' style='padding-left:75px;margin-top:20px;'>
+               {if $goods['read']}
+                 {if $goods['goodsType']==0}
+                 <a id='addBtn' href='javascript:void(0);' class='addBtn un-buy' >加入购物车</a>
+                 {/if}
+                 <a id='buyBtn' href='javascript:void(0);' class='buyBtn un-buy'>立即购买</a>
+               {else}
+                 {if $goods['goodsType']==0}
+                 <a id='addBtn' href='javascript:addCart(0,"#buyNum")' class='addBtn' >加入购物车</a>
+                 {/if}
+                 <a id='buyBtn' href='javascript:addCart(1,"#buyNum")' class='buyBtn'>立即购买</a>
+               {/if}
+               <div class="wst-favorite">
+               {if ($goods['favGood']>0)}
+                 <a href='javascript:void(0);' onclick='WST.cancelFavorite(this,0,{$goods["goodsId"]},{$goods['favGood']})' class='favorite j-fav'>已关注</a>
+               {else}
+                 <a href='javascript:void(0);' onclick='WST.addFavorite(this,0,{$goods["goodsId"]},{$goods["goodsId"]})' class='favorite j-fav2 j-fav3'>关注商品</a>
+               {/if}
+               </div>
+             </div>
+             
+             {:hook('homeDocumentGoodsDetail',['goods'=>$goods,'getParams'=>input()])}
+			
+             <div style="clear: both;"></div>
+				<div style="margin-top:10px;float: right;">
+				<!-- JiaThis Button BEGIN -->
+				<div class="jiathis_style_24x24">
+					<a class="jiathis_button_qzone"></a>
+					<a class="jiathis_button_tsina"></a>
+					<a class="jiathis_button_tqq"></a>
+					<a class="jiathis_button_weixin"></a>
+					<a class="jiathis_button_cqq"></a>
+					<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>					
+				</div>
+				<div style="clear: both;"></div>
+				</div>
+				
+			<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+             
+             
+          </div>
+      </div>
+
+      <div class='seeing'>
+         <div class='head'>看了又看</div>
+         <div class='body'>
+          {wst:goods type="visit" cat="$goods['goodsCatId']" num="5" id="visit" num="6"}
+          <a href="{:Url('home/goods/detail','id='.$visit['goodsId'])}">
+          <div class="see-item">
+            <div class="see-img">
+              <img title="{$visit['goodsName']}" class="goodsImg" alt="{$visit['goodsName']}" data-original="__ROOT__/{$visit['goodsImg']}">
+              <span class="see-price">￥{$visit['shopPrice']}</span>
+            </div>
+          </div>
+          </a>
+          {/wst:goods}
+
+          
+
+
+         </div>
+      </div>
+      <div class='wst-clear'></div>
+   </div>
+</div>
+<div class='wst-w'>
+   <div class='wst-container'>
+       <div class='wst-side'>
+           <div class='shop-intro'>
+                <div class='title'>{$shop['shopName']}</div>
+                <div class='body'>
+                    <div class='totalScore'><img class="shopsImg" data-original="__ROOT__/{$shop['shopImg']}" title="{$shop['shopName']}" style="width:75px;height:75px;"></div>
+                    <div class='itemScore'>商品评价：{if ($shop['goodsScore']!=0)}{$shop['goodsScore']}{else /}5{/if}</div>
+                    <div class='itemScore'>服务评分：{if ($shop['serviceScore']!=0)}{$shop['goodsScore']}{else /}5{/if}</div>
+                    <div class='itemScore'>物流速度：{if ($shop['timeScore']!=0)}{$shop['goodsScore']}{else /}5{/if}</div>
+                </div>
+                <div class='footer'>
+                   <a class="home" href='{:Url("home/shops/home","shopId=".$shop["shopId"])}' target='_blank'>进店逛逛</a>
+                   {if ($goods['favShop']>0)}
+                   <a class="j-fav" href='javascript:void(0);' onclick='WST.cancelFavorite(this,1,{$shop["shopId"]},{$goods['favShop']})'>已关注</a>
+                   {else}
+                   <a class="j-fav2" href='javascript:void(0);' onclick='WST.addFavorite(this,1,{$shop["shopId"]},{$goods['favShop']})'>关注店铺</a>
+                   {/if}
+                   <div class='wst-clear'></div>
+                </div>
+           </div>
+		   <div class="goods-side">
+				<div class="guess-like">
+					<div class="title">猜你喜欢</div>
+					{wst:goods type='best' cat="$goods['goodsCatId']" num='3'}
+					<div class="item">
+						<div class="img"><a target='_blank' href="{:Url('home/goods/detail','id='.$vo['goodsId'])}"><img title="{$vo['goodsName']}" alt="{$vo['goodsName']}" src="__ROOT__/{:WSTImg($vo['goodsImg'])}"></a></div>
+						<div class="p-name"><a class="wst-hide wst-redlink">{$vo['goodsName']}</a></div>
+						<div class="p-price">￥{$vo['shopPrice']}<span class="v-price">￥{$vo['marketPrice']}</span></div>
+					</div>
+					{/wst:goods}
+				</div>
+				<div class="hot-goods">
+					<div class="title">热销商品</div>
+					{wst:goods type='hot' num='3'}
+					<div class="item">
+						<div class="img"><a target='_blank' href="{:Url('home/goods/detail','id='.$vo['goodsId'])}"><img title="{$vo['goodsName']}" alt="{$vo['goodsName']}" src="__ROOT__/{:WSTImg($vo['goodsImg'])}"></a></div>
+						<div class="p-name"><a class="wst-hide wst-redlink">{$vo['goodsName']}</a></div>
+						<div class="p-price">￥{$vo['shopPrice']}<span class="v-price">￥{$vo['marketPrice']}</span></div>
+					</div>
+					{/wst:goods}
+				</div>
+			</div>
+		</div>
+		<div class='goods-desc'>
+		    <div id='tab' class="wst-tab-box">
+				<ul id='goodsTabs' class="wst-tab-nav">
+				   <li>商品介绍</li>
+				   <li>商品评价<span class='appraise-num'>（{$goods['appraiseNum']}）</span></li>
+           {if !$goods['read'] && $goods['goodsType']==0}
+           <a id='addCart2' href='javascript:addCart(1,"#buyNum")'>立即购买</a>
+           {/if}
+				</ul>
+			  <div class="wst-tab-content" style='width:99%;margin-bottom: 10px;min-height:1312px;'>
+			       <div class="wst-tab-item goods-desc-box" style="position: relative;">
+			       <ul class='wst-attrs-list'>
+                {volist name="$goods['attrs']" id="vo"}
+                  <li title='{$vo['attrVal']}'>{$vo['attrName']}：{$vo['attrVal']}</li>
+                {/volist}
+             </ul>
+             {$goods['goodsDesc']|htmlspecialchars_decode}
+			       </div>
+             <script id="tblist" type="text/html">
+               {{# for(var i = 0; i < d.length; i++){ }}
+               <div class="appraises-box">
+                <div class="wst-appraises-left">
+                  <p class="app-content">
+                    {{d[i]['content']}}
+                  </p>
+                  {{#  if(WST.blank(d[i]['images'])!=''){ var img = d[i]['images'].split(','); var length = img.length;  }}
+                  <div id="img-file-{{i}}">
+                  {{#  for(var g=0;g<length;g++){  }}
+                         <img src="__ROOT__/{{img[g].replace('.','_thumb.')}}" layer-src="__ROOT__/{{img[g]}}"  style="width:80px;height:80px;" />
+                  {{#  } }}
+                  </div>
+                  {{# }  }}
+                  {{# if(d[i]['shopReply']!='' && d[i]['shopReply']!=null){ }}
+                  <div class="reply-box">
+                     <p class="reply-content"><a href="javascript:void(0)" onclick="goShop({{d[i]['shopId']}})">{{d[i]['shopName']}}</a>：{{d[i]['shopReply']}}</p>
+                     <p class="reply-time">{{d[i]['replyTime']}}</p>
+                 </div>
+                 {{# } }}
+
+               </div>
+               <div class="wst-appraises-right">
+                <div class="goods-spec-box">
+                    {{d[i]['goodsSpecNames']}}
+                </div>
+                <div class="appraiser">
+                    【{{d[i]['loginName']}}】
+                </div>
+               </div>
+             <div class="wst-clear"></div>
+              </div> 
+               {{# } }}
+               </script>
+			       <div class="wst-tab-item" style="position: relative;display:none;">
+                <div id='ga-box'></div>
+                <div id='pager' style='text-align:center;'></div>
+			       </div>
+		    </div>
+		</div>	
+		<div class='wst-clear'></div>
+	</div>
+	<div class='wst-clear'></div>
+</div>
+{include file="default/right_cart"/}
+{/block}
+{block name="js"}
+<script>
+var goodsInfo = {
+	id:{$goods['goodsId']},	
+	isSpec:{$goods['isSpec']},
+	goodsStock:{$goods['goodsStock']},
+	marketPrice:{$goods['marketPrice']},
+	goodsPrice:{$goods['shopPrice']}
+	{if isset($goods['saleSpec'])}
+	,sku:{:json_encode($goods['saleSpec'])}
+	{/if}
+}
+</script>
+<script type='text/javascript' src='__STYLE__/js/cloudzoom.js?v={$v}'></script>
+<script type='text/javascript' src='__STYLE__/js/goods.js?v={$v}'></script>
+<script type='text/javascript' src='__STYLE__/js/qrcode.js?v={$v}'></script>
+<script>
+$(function(){
+	var qr = qrcode(10, 'M');
+	var url = '{:url("wechat/goods/detail","","html",true)}?goodsId={$goods["goodsId"]}';
+	qr.addData(url);
+	qr.make();
+	$('#qrcode').html(qr.createImgTag());
+});
+function goShop(id){
+  location.href=WST.U('home/shops/home','shopId='+id);
+}
+</script>
+{/block}

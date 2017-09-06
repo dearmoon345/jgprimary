@@ -1,0 +1,146 @@
+{extend name="default/users/base" /}
+{block name="title"}待付款订单 - 买家中心{__block__}{/block}
+{block name="css"}
+{/block}
+{block name="content"}
+ <div class="wst-user-head">
+    <span>待付款订单</span>
+    <div class="wst-user-ss">
+      <input type="text" id='orderNo' class="u-query" placeholder="输入订单号">
+      <button onclick="waitPayByPage()">搜索</button>
+    </div>
+  </div>
+   <div class='wst-user-content'>
+    <div class="wst-head">
+      <a class="one">商品</a>
+      <a>售价</a>
+      <a id="number">数量</a>
+      <a class="two">支付方式/配送信息</a>
+      <a class="last">金额</a>
+      <a class="cz">操作</a>
+    </div>
+    <table class='wst-order-list'>
+     <tbody id='loadingBdy'>
+         <tr id='loading' class='empty-row' style='display:none'>
+              <td colspan='4'><img src="__STYLE__/img/loading.gif">正在加载数据...</td>
+         </tr>
+       </tbody>
+       <script id="tblist" type="text/html">
+       {{# for(var i = 0; i < d.length; i++){ }}
+       <tbody class="j-order-row">
+         <tr class='order-head'>
+            <td colspan='4' align='right'>
+              <div class='time'>订单时间：{{d[i].createTime}}</div>
+              <div class='orderno'>订单号：{{d[i].orderNo}}</div>
+              <div class="remaining-time" style="float: left; text-align: left;"></div>
+              <!-- <div><a href="#">店铺昵称可点击进入店铺</a></div> -->
+               <div>{{d[i].status}}&nbsp;|&nbsp;<a class="cancel" data-id={{d[i].orderId}} href='#none' onclick='javascript:cancel({{d[i].orderId}},0)'>取消订单</a></div>
+            </td>
+         </tr>
+
+
+         {{# 
+            var tmp = null,rows = d[i]['list'].length;
+            for(var j = 0; j < d[i]['list'].length; j++){ 
+            tmp = d[i]['list'][j];
+            var parmas = {};
+            parmas.orderNo = d[i].orderNo;
+            parmas.isBatch = 0;
+         }}
+         <tr class='goods-box'>
+            <td>
+               <div class='goods-img'>
+                <a href="{{WST.U('home/goods/detail','id='+tmp.goodsId)}}" target='_blank'>
+                <img data-original='__ROOT__/{{tmp.goodsImg}}'  title='{{tmp.goodsName}}' class="gImg">
+                </a>
+               </div>
+               <div class='goods-name'>
+                 <div class="g-name">{{tmp.goodsName}}</div>
+                 <div class="g-specname">{{tmp.goodsSpecNames}}</div>
+               </div>
+               <div class='goods-extra'>
+                  <div class="price">88</div>
+                  <div>{{tmp.goodsPrice}}</div>
+              </div>
+              <div class='goods-extra1'>{{tmp.goodsNum}}</div>
+            </td>
+            
+            <td class="mode">
+                <div>{{d[i].payTypeName}}</div>
+                <div>{{d[i].deliverType}}</div>
+            </td>
+            <td class="sum">                
+                <div class="paid">实付金额：¥<span>{{d[i].realTotalMoney}}</span></div>
+                <div class='line'>运费：¥{{d[i].deliverMoney}}</div>
+            </td>
+            <td class="operation">
+                <div><a href='{{WST.U('home/orders/succeed',parmas)}}'>【立即支付】</a></div>
+                <div><a  href='#none' onclick='view({{d[i].orderId}})'>【订单详情】</a></div>
+            </td>
+          
+         </tr>
+         {{# } }}
+       </tbody>
+       {{# } }}
+       </script>
+       <tr class='empty-row'>
+            <td colspan='4' id='pager' align="center" style='padding:5px 0px 5px 0px'>&nbsp;</td>
+       </tr>
+    </table>
+  </div>
+
+<script>
+    var time1 =  new Date();
+    var time2 = new Date();
+    console.log(time2);
+</script>
+{/block}
+{block name="js"}
+<script type='text/javascript' src='__STYLE__/users/orders/orders.js?v={$v}'></script>
+<script>
+
+	
+		$(function(){
+					waitPayByPage();
+					function getMyTime() {
+					$('.wst-order-list .j-order-row').each(function() {
+						// 前面补0 
+						function p(n) {
+							return n < 10 ? '0' + n : n; 
+						}
+
+						//获取下单时间 
+						var time = "2017-08-29 7:58:40";
+//						var time = $(this).find(".time").text();
+//						time = time.replace("订单时间：", "");
+						var ordertime = new Date(time);
+						//获取最后提交日期
+//						var endDate = new Date(ordertime.setDate(ordertime.getDate() + 2));
+						var endDate = new Date(ordertime.setHours(ordertime.getHours()+2));
+						//获取当前时间 
+						var nowDate = new Date();
+						var countDown = (endDate.getTime() - nowDate.getTime()) / 1000;
+						var day = parseInt(countDown / (24 * 60 * 60));
+						var h = parseInt(countDown / (60 * 60) % 24);
+						var m = parseInt(countDown / 60 % 60);
+						var s = parseInt(countDown % 60); 
+
+						//显示倒计时
+						$(this).find(".remaining-time").html('剩余支付时间：   ' +day + '天' + p(h) + '时' + p(m) + '分' + p(s) + '秒');
+
+						//关闭定时器
+						if(countDown <= 0) {
+ 							
+ 							$(this).find(".remaining-time").html('活动结束');
+   							var orderId= $.trim($(this).find('.cancel').attr("data-id"));
+
+   							CancellationOrder(orderId,5); 
+ 							$(this).remove();
+						}
+					});
+				}
+				//开启定时器 
+				var shua = setInterval(getMyTime, 1000); 
+		})
+</script>
+{/block}

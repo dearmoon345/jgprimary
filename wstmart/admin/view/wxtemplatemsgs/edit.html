@@ -1,0 +1,77 @@
+{extend name="base" /}
+{block name="js"}
+<script src="__ADMIN__/wxtemplatemsgs/wxtemplatemsgs.js?v={$v}" type="text/javascript"></script>
+{/block}
+{block name="main"}
+
+<div class="l-loading" style="display: block" id="wst-loading"></div>
+<form autocomplete='off'>
+<input type='hidden' id='id' class='ipt' value="{$object['id']}"/>
+<input type='hidden' id='tplCode' class='ipt' value="{$object['tplCode']}"/>
+<table class='wst-form wst-box-top'>
+  <tr>
+     <th width='120'>发送时机：</th>
+     <td>
+         {volist name=':WSTDatas(9)' id='vo'}
+         {if $vo['dataVal']==$object['tplCode']}{$vo['dataName']}{/if}
+         {/volist}
+     </td>
+  </tr>
+  <tr>
+     <th>模板ID：</th>
+     <td>
+     <input type='text' id='tplExternaId' class='ipt' style='width:70%' maxLength='200' value='{$object['tplExternaId']}'>
+     </td>
+  </tr>
+  <tr>
+     <th>内容：</th>
+     <td>
+     <textarea id='tplContent' style='width:70%;height:100px;' class='ipt' maxLength='150'>{$object['tplContent']}</textarea>
+     </td>
+  </tr>
+  <tr>
+     <th>参数设置：</th>
+     <td>
+     <div class='wst-toolbar'> 
+         <font color='red'>（双击表格修改参数及内容）</font>
+         <input type='button' value='新增' class='btn btn-green f-right' onclick='javascript:addNewRow()'>
+         <div style='clear:both;'></div>
+     </div>
+     <div id='paramGrid'>
+       <table border='1' width='100%'>
+          <tr>
+            <td width='20%'>变量名</td>
+            <td width='73%'>内容</td>
+            <td width='50'>操作</td>
+          </tr>
+          <tbody id='paramlist'>
+          </tbody>
+       </table>
+       <script id="paramjs" type="text/html">
+       {{# for(var i = 0; i < d.length; i++){ }}
+       <tr id='tr_{{i}}'>
+         <td><input type="text" style="width:92%" id="fiedlCode_{{i}}" value='{{d[i].fieldCode}}'/></td>
+         <td><input type="text" style="width:98%" id="fiedlVal_{{i}}" value='{{d[i].fieldVal}}'/></td>
+         <td>
+         <input type="button" value="删除" class="btn btn-red" onclick="javascript:deleteRow({{i}})">
+         </td>
+       </tr>
+       {{# } }}
+       </script>
+     </div>
+     </td>
+  </tr>
+  <tr>
+     <th valign="top">说明：</th>
+     <td id='tplDesc'>{$object['tplDesc']}</td>
+  </tr>
+  <tr>
+     <td colspan='2' align='center'>
+       <input type='button' value='保存' class='btn btn-blue' onclick='javascript:save(0)'>
+       <input type='button' value='返回' class='btn' onclick='javascript:history.go(-1)'>
+     </td>
+  </tr>
+</table>
+</form>
+<script>$(function(){initParamGrid();})</script>
+{/block}
